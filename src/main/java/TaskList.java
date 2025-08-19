@@ -1,9 +1,9 @@
 public class TaskList {
     private final Task[] items;
-    private int capacity;
+    private final int capacity;
     private int size;
 
-    TaskList(int capacity) {
+    public TaskList(int capacity) {
         this.items = new Task[capacity];
         this.capacity = capacity;
     }
@@ -14,6 +14,14 @@ public class TaskList {
         }
         items[size++] = task;
         return true;
+    }
+
+    public void mark(int index) {
+        items[index].mark();
+    }
+
+    public void unmark(int index) {
+        items[index].unmark();
     }
 
     public int size() {
