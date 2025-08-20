@@ -1,6 +1,6 @@
 public class Snow {
     private static final String NAME = "Snow";
-    private static final TaskList tasks = new TaskList(100);
+    private static final TaskList tasks = new TaskList();
 
 
     public static void main(String[] args) {
@@ -12,55 +12,58 @@ public class Snow {
         while (true) {
             String input = ui.getInput();
             ui.printLine();
-            if (input.equals("bye")) {
-                ui.print("Bye! Stay cool and see you again soon!");
-                ui.printLine();
-                return;
-            }
-            else if (input.equals("list")) {
-                ui.printList(tasks);
-            }
-            else if (input.startsWith("mark")) {
-                int index = Integer.parseInt(Parser.splitCommand(input)[1]) - 1;
-                tasks.mark(index);
-                ui.printMark(tasks.get(index));
-            }
-            else if (input.startsWith("unmark")) {
-                int index = Integer.parseInt(Parser.splitCommand(input)[1]) - 1;
-                tasks.unmark(index);
-                ui.printUnmark(tasks.get(index));
-            }
-            else if (input.startsWith("todo")) {
-                ToDo task = new ToDo(Parser.splitCommand(input)[1]);
-                if (tasks.add(task)) {
-                    ui.printAdd(task, tasks.size());
+            try {
+                Command cmd = Parser.getCmd(input);
+                switch (cmd) {
+                    case BYE:
+                        ui.print("Bye! Stay cool and see you again soon!");
+                        ui.printLine();
+                        return;
+                    case LIST:
+                        ui.printList(tasks);
+                        break;
+                    case MARK: {
+                        int index = Integer.parseInt(Parser.splitCommand(input)[1]) - 1;
+                        tasks.mark(index);
+                        ui.printMark(tasks.get(index));
+                        break;
+                    }
+                    case UNMARK: {
+                        int index = Integer.parseInt(Parser.splitCommand(input)[1]) - 1;
+                        tasks.unmark(index);
+                        ui.printUnmark(tasks.get(index));
+                    }
+                    case TODO: {
+                        ToDo todo = new ToDo(Parser.splitCommand(input)[1]);
+                        tasks.add(todo);
+                        ui.printAdd(todo, tasks.size());
+                        break;
+                    }
+                    case DEADLINE: {
+                        String[] parts = Parser.splitDeadline(input);
+                        Deadline deadline = new Deadline(parts[0], parts[1]);
+                        tasks.add(deadline);
+                        ui.printAdd(deadline, tasks.size());
+                        break;
+                    }
+                    case EVENT: {
+                        String[] parts = Parser.splitEvent(input);
+                        Event event = new Event(parts[0], parts[1], parts[2]);
+                        tasks.add(event);
+                        ui.printAdd(event, tasks.size());
+                        break;
+                    }
+                    case DELETE: {
+                        String[] parts = Parser.splitCommand(input);
+                        int index = Integer.parseInt(parts[1]) - 1;
+                        Task removed = tasks.remove(index);
+                        ui.printDelete(removed, tasks.size());
+                        break;
+                    }
                 }
-                else {
-                    ui.printFull();
-                }
             }
-            else if (input.startsWith("deadline")) {
-                String[] parts = Parser.splitDeadline(input);
-                Deadline task = new Deadline(parts[0], parts[1]);
-                if (tasks.add(task)) {
-                    ui.printAdd(task, tasks.size());
-                }
-                else {
-                    ui.printFull();
-                }
-            }
-            else if (input.startsWith("event")) {
-                String[] parts = Parser.splitEvent(input);
-                Event task = new Event(parts[0], parts[1], parts[2]);
-                if (tasks.add(task)) {
-                    ui.printAdd(task, tasks.size());
-                }
-                else {
-                    ui.printFull();
-                }
-            }
-            else {
-                ui.printInvalid();
+            catch (SnowException e) {
+                ui.print(e.getMessage());
             }
             ui.printLine();
         }

@@ -1,4 +1,3 @@
-package PACKAGE_NAME;
-
-public class Command {
+public enum Command {
+    TODO, DEADLINE, EVENT, LIST, DELETE, MARK, UNMARK, BYE, UNKNOWN
 }

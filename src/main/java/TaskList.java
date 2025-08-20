@@ -1,27 +1,26 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class TaskList {
-    private final Task[] items;
-    private final int capacity;
+    private final List<Task> items;
     private int size;
 
-    public TaskList(int capacity) {
-        this.items = new Task[capacity];
-        this.capacity = capacity;
+    public TaskList() {
+        this.items = new ArrayList<Task>();
+        this.size = 0;
     }
 
-    public boolean add(Task task) {
-        if (size >= capacity) {
-            return false;
-        }
-        items[size++] = task;
-        return true;
+    public void add(Task task) {
+        items.add(task);
+        size++;
     }
 
     public void mark(int index) {
-        items[index].mark();
+        items.get(index).mark();
     }
 
     public void unmark(int index) {
-        items[index].unmark();
+        items.get(index).unmark();
     }
 
     public int size() {
@@ -29,6 +28,14 @@ public class TaskList {
     }
 
     public Task get(int i) {
-        return items[i];
+        return items.get(i);
+    }
+
+    public Task remove(int i) throws SnowInvalidIndexException {
+        if (i < 0 || i >= size) {
+            throw new SnowInvalidIndexException();
+        }
+        size--;
+        return items.remove(i);
     }
 }

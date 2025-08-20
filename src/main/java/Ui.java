@@ -6,9 +6,8 @@ public class Ui {
     private static final String UNMARK = "OK, I've marked this task as not done yet:";
     private static final String INDENT = "     ";
     private static final String LINE = "    ____________________________________________________________";
-    private static final String ADDTASK = "Got it. I've added this task:";
-    private static final String LISTFULL = "Task list full. Cannot add more tasks.";
-    private static final String INVALID = "Invalid command. Please try again.";
+    private static final String ADD = "Got it. I've added this task:";
+    private static final String DELETE = "Noted. I've removed this task:";
 
     private final Scanner sc;
 
@@ -31,7 +30,7 @@ public class Ui {
     public void printList(TaskList tasks) {
         print(LIST);
         for (int i = 0; i < tasks.size(); ++i) {
-            print("  " + (i + 1) + "." + tasks.get(i));
+            print((i + 1) + "." + tasks.get(i));
         }
     }
 
@@ -46,16 +45,14 @@ public class Ui {
     }
 
     public void printAdd(Task task, int size) {
-        print(ADDTASK);
+        print(ADD);
         print("  " + task);
-        print("Now you have " + size + " tasks in the list");
+        print("Now you have " + size + " tasks in the list.");
     }
 
-    public void printInvalid() {
-        print(INVALID);
-    }
-
-    public void printFull() {
-        print(LISTFULL);
+    public void printDelete(Task task, int size) {
+        print(DELETE);
+        print("  " + task);
+        print("Now you have " + size + " tasks in your list.");
     }
 }
