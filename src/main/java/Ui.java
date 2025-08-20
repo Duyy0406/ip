@@ -6,6 +6,9 @@ public class Ui {
     private static final String UNMARK = "OK, I've marked this task as not done yet:";
     private static final String INDENT = "     ";
     private static final String LINE = "    ____________________________________________________________";
+    private static final String ADDTASK = "Got it. I've added this task:";
+    private static final String LISTFULL = "Task list full. Cannot add more tasks.";
+    private static final String INVALID = "Invalid command. Please try again.";
 
     private final Scanner sc;
 
@@ -40,5 +43,19 @@ public class Ui {
     public void printUnmark(Task task) {
         print(UNMARK);
         print("  " + task);
+    }
+
+    public void printAdd(Task task, int size) {
+        print(ADDTASK);
+        print("  " + task);
+        print("Now you have " + size + " tasks in the list");
+    }
+
+    public void printInvalid() {
+        print(INVALID);
+    }
+
+    public void printFull() {
+        print(LISTFULL);
     }
 }

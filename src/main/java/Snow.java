@@ -1,11 +1,10 @@
 public class Snow {
     private static final String NAME = "Snow";
     private static final TaskList tasks = new TaskList(100);
-    private static Ui ui;
 
 
     public static void main(String[] args) {
-        ui = new Ui();
+        Ui ui = new Ui();
         ui.printLine();
         ui.print("Hello! I'm " + NAME);
         ui.print("What can I do for you?");
@@ -31,8 +30,37 @@ public class Snow {
                 tasks.unmark(index);
                 ui.printUnmark(tasks.get(index));
             }
-            else if (tasks.add(new Task(input))) {
-                ui.print("added: " + input);
+            else if (input.startsWith("todo")) {
+                ToDo task = new ToDo(Parser.splitCommand(input)[1]);
+                if (tasks.add(task)) {
+                    ui.printAdd(task, tasks.size());
+                }
+                else {
+                    ui.printFull();
+                }
+            }
+            else if (input.startsWith("deadline")) {
+                String[] parts = Parser.splitDeadline(input);
+                Deadline task = new Deadline(parts[0], parts[1]);
+                if (tasks.add(task)) {
+                    ui.printAdd(task, tasks.size());
+                }
+                else {
+                    ui.printFull();
+                }
+            }
+            else if (input.startsWith("event")) {
+                String[] parts = Parser.splitEvent(input);
+                Event task = new Event(parts[0], parts[1], parts[2]);
+                if (tasks.add(task)) {
+                    ui.printAdd(task, tasks.size());
+                }
+                else {
+                    ui.printFull();
+                }
+            }
+            else {
+                ui.printInvalid();
             }
             ui.printLine();
         }
