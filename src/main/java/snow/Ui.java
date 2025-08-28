@@ -1,3 +1,5 @@
+package snow;
+
 import java.util.Scanner;
 
 public class Ui {

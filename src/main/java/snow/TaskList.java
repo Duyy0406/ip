@@ -1,3 +1,7 @@
+package snow;
+
+import snow.exception.SnowInvalidIndexException;
+
 import java.util.ArrayList;
 import java.util.List;
 
