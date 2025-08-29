@@ -4,6 +4,8 @@ import snow.exception.SnowInvalidIndexException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class TaskList {
     private final List<Task> items;
@@ -41,5 +43,12 @@ public class TaskList {
         }
         size--;
         return items.remove(i);
+    }
+
+    public List<Task> find(String keyword) {
+        Pattern p = Pattern.compile(Pattern.quote(keyword), Pattern.CASE_INSENSITIVE);
+        return items.stream()
+                .filter(t -> p.matcher(t.getDescription()).find())
+                .collect(Collectors.toList());
     }
 }

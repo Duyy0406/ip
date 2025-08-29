@@ -2,6 +2,8 @@ package snow;
 
 import snow.exception.SnowException;
 
+import java.util.List;
+
 /**
  * Represents the main entry point of the Snow application.
  * Handles user interaction, parses commands, and delegates task operations.
@@ -101,6 +103,14 @@ public class Snow {
                         Task removed = TASKS.remove(index);
                         storage.save(TASKS);
                         ui.printDelete(removed, TASKS.size());
+                        break;
+                    }
+
+                    case FIND: {
+                        String[] parts = Parser.splitCommand(input);
+                        String pattern = parts[1];
+                        List<Task> tasksFound = TASKS.find(pattern);
+                        ui.printFind(tasksFound);
                         break;
                     }
 

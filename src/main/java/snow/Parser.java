@@ -40,6 +40,8 @@ public class Parser {
                 return Command.LIST;
             case "delete":
                 return Command.DELETE;
+            case "find":
+                return Command.FIND;
             case "bye":
                 return Command.BYE;
             default:

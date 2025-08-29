@@ -1,5 +1,6 @@
 package snow;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Ui {
@@ -10,6 +11,7 @@ public class Ui {
     private static final String LINE = "    ____________________________________________________________";
     private static final String ADD = "Got it. I've added this task:";
     private static final String DELETE = "Noted. I've removed this task:";
+    private static final String FIND = "Here are the matching tasks in your list:";
 
     private final Scanner sc;
 
@@ -56,5 +58,12 @@ public class Ui {
         print(DELETE);
         print("  " + task);
         print("Now you have " + size + " tasks in your list.");
+    }
+
+    public void printFind(List<Task> tasksFound) {
+        print(FIND);
+        for (int i = 0; i < tasksFound.size(); ++i) {
+            print((i + 1) + "." + tasksFound.get(i));
+        }
     }
 }
