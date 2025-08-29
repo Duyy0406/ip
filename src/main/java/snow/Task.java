@@ -41,6 +41,10 @@ public abstract class Task {
         return (this.done ? "1" : "0") + " | " + this.name;
     }
 
+    public boolean isDone() {
+        return this.done;
+    }
+
     @Override
     public String toString() {
         return (done ? "[X] " : "[ ] ") + name;
