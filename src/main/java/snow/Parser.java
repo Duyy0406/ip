@@ -97,4 +97,32 @@ public class Parser {
         }
         return new String[] {parts[0], dates[0], dates[1]};
     }
+
+    // Split a saved line into a Task object
+    // Format:
+    //  - Todo:     "0 || todo || description"
+    //  - Deadline: "1 || deadline || description || by"
+    //  - Event:    "0 || event || description || from || to"
+    public static Task parseLine(String line) {
+        String[] parts = line.split(" \\|\\| ");
+
+        String type = parts[0];
+        boolean isDone = (parts[1].equals("1"));
+        String name = parts[2];
+
+        Task t = null;
+        if ("todo".equals(type)) {
+            t = new Todo(name);
+        } else if ("deadline".equals(type)) {
+            t = new Deadline(name, parts[3]);
+        } else if ("event".equals(type)) {
+            // using separate from/to fields (recommended)
+            t = new Event(name, parts[3], parts[4]);
+        }
+
+        if (t != null && isDone) {
+            t.mark();
+        }
+        return t;
+    }
 }

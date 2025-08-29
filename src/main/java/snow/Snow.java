@@ -14,6 +14,9 @@ public class Snow {
     /** Central list of tasks managed by the application. */
     private static final TaskList TASKS = new TaskList();
 
+    /** The file path for the storage */
+    private static final String FILE_PATH = "data/snow.txt";
+
     /**
      * Runs the Snow application.
      *
@@ -28,6 +31,9 @@ public class Snow {
         ui.print("Hello! I'm " + NAME);
         ui.print("What can I do for you?");
         ui.printLine();
+
+        Storage storage = new Storage(FILE_PATH);
+        storage.load(TASKS);
 
         while (true) {
             String input = ui.getInput();
@@ -48,6 +54,7 @@ public class Snow {
                         String[] parts = Parser.splitCommand(input);
                         int index = Integer.parseInt(parts[1]) - 1;
                         TASKS.mark(index);
+                        storage.save(TASKS);
                         ui.printMark(TASKS.get(index));
                         break;
                     }
@@ -56,14 +63,16 @@ public class Snow {
                         String[] parts = Parser.splitCommand(input);
                         int index = Integer.parseInt(parts[1]) - 1;
                         TASKS.unmark(index);
+                        storage.save(TASKS);
                         ui.printUnmark(TASKS.get(index));
                         break; // prevent fall-through
                     }
 
                     case TODO: {
                         String[] parts = Parser.splitCommand(input);
-                        ToDo todo = new ToDo(parts[1]);
+                        Todo todo = new Todo(parts[1]);
                         TASKS.add(todo);
+                        storage.save(TASKS);
                         ui.printAdd(todo, TASKS.size());
                         break;
                     }
@@ -72,6 +81,7 @@ public class Snow {
                         String[] parts = Parser.splitDeadline(input);
                         Deadline deadline = new Deadline(parts[0], parts[1]);
                         TASKS.add(deadline);
+                        storage.save(TASKS);
                         ui.printAdd(deadline, TASKS.size());
                         break;
                     }
@@ -80,6 +90,7 @@ public class Snow {
                         String[] parts = Parser.splitEvent(input);
                         Event event = new Event(parts[0], parts[1], parts[2]);
                         TASKS.add(event);
+                        storage.save(TASKS);
                         ui.printAdd(event, TASKS.size());
                         break;
                     }
@@ -88,6 +99,7 @@ public class Snow {
                         String[] parts = Parser.splitCommand(input);
                         int index = Integer.parseInt(parts[1]) - 1;
                         Task removed = TASKS.remove(index);
+                        storage.save(TASKS);
                         ui.printDelete(removed, TASKS.size());
                         break;
                     }
@@ -101,5 +113,6 @@ public class Snow {
             }
             ui.printLine();
         }
+
     }
 }

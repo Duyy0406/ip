@@ -4,13 +4,13 @@ package snow;
  * Represents a task with a description and completion status.
  * A Task can be marked as done or undone.
  */
-public class Task {
+public abstract class Task {
 
     /** Description of the task. */
-    private final String name;
+    final String name;
 
     /** Completion status of the task. */
-    private boolean done;
+    boolean done;
 
     /**
      * Creates a task with the specified description.
@@ -35,6 +35,10 @@ public class Task {
      */
     public void unmark() {
         this.done = false;
+    }
+
+    public String toSaveString() {
+        return (this.done ? "1" : "0") + " | " + this.name;
     }
 
     @Override

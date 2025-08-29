@@ -7,10 +7,10 @@ package snow;
 public class Event extends Task {
 
     /** Start date of the event. */
-    private String fromDate;
+    private final String fromDate;
 
     /** End date of the event. */
-    private String toDate;
+    private final String toDate;
 
     /**
      * Creates an event with the specified description, start date, and end date.
@@ -23,6 +23,11 @@ public class Event extends Task {
         super(name);
         this.fromDate = fromDate;
         this.toDate = toDate;
+    }
+
+    @Override
+    public String toSaveString() {
+        return "E | " + super.toSaveString() + " | " + this.fromDate + " | " + this.toDate;
     }
 
     @Override

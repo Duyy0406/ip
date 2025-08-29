@@ -7,7 +7,7 @@ package snow;
 public class Deadline extends Task {
 
     /** Due date of the deadline task. */
-    private String date;
+    private final String date;
 
     /**
      * Creates a deadline task with the specified description and due date.
@@ -18,6 +18,11 @@ public class Deadline extends Task {
     public Deadline(String name, String date) {
         super(name);
         this.date = date;
+    }
+
+    @Override
+    public String toSaveString() {
+        return "D | " + super.toSaveString() + " | " + this.date;
     }
 
     /**
