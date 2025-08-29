@@ -4,6 +4,8 @@ import snow.exception.SnowEmptyDateException;
 import snow.exception.SnowEmptyTaskException;
 import snow.exception.SnowInvalidCommandException;
 
+import java.time.LocalDateTime;
+
 
 /**
  * Provides methods to parse user input into commands and arguments.
@@ -99,25 +101,21 @@ public class Parser {
     }
 
     // Split a saved line into a Task object
-    // Format:
-    //  - Todo:     "0 || todo || description"
-    //  - Deadline: "1 || deadline || description || by"
-    //  - Event:    "0 || event || description || from || to"
     public static Task parseLine(String line) {
-        String[] parts = line.split(" \\|\\| ");
+        String[] parts = line.split(" \\| ");
 
         String type = parts[0];
         boolean isDone = (parts[1].equals("1"));
         String name = parts[2];
 
         Task t = null;
-        if ("todo".equals(type)) {
+        if ("T".equals(type)) {
             t = new Todo(name);
-        } else if ("deadline".equals(type)) {
-            t = new Deadline(name, parts[3]);
-        } else if ("event".equals(type)) {
+        } else if ("D".equals(type)) {
+            t = new Deadline(name, LocalDateTime.parse(parts[3]));
+        } else if ("E".equals(type)) {
             // using separate from/to fields (recommended)
-            t = new Event(name, parts[3], parts[4]);
+            t = new Event(name, LocalDateTime.parse(parts[3]), LocalDateTime.parse(parts[3]));
         }
 
         if (t != null && isDone) {

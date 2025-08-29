@@ -1,5 +1,7 @@
 package snow;
 
+import java.time.LocalDateTime;
+
 /**
  * Represents a task with a deadline.
  * A Deadline has a description and a due date.
@@ -7,7 +9,7 @@ package snow;
 public class Deadline extends Task {
 
     /** Due date of the deadline task. */
-    private final String date;
+    private final LocalDateTime date;
 
     /**
      * Creates a deadline task with the specified description and due date.
@@ -16,6 +18,11 @@ public class Deadline extends Task {
      * @param date Due date of the deadline task.
      */
     public Deadline(String name, String date) {
+        super(name);
+        this.date = DateTime.parse(date);
+    }
+
+    public Deadline(String name, LocalDateTime date) {
         super(name);
         this.date = date;
     }
@@ -32,6 +39,6 @@ public class Deadline extends Task {
      */
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + date + ")";
+        return "[D]" + super.toString() + " (by: " + date.format(DateTime.OUT_DT) + ")";
     }
 }

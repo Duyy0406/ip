@@ -60,9 +60,8 @@ public class Storage {
                 while (sc.hasNextLine()) {
                     String line = sc.nextLine();
                     Task task = Parser.parseLine(line);
-
                     if (task != null) {
-                        taskList.add(task);  // just add, Task handles its own toString()
+                        taskList.add(task);
                     }
                 }
             }
