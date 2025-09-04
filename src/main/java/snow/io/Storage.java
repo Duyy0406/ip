@@ -1,4 +1,4 @@
-package snow;
+package snow.io;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -6,14 +6,26 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+import snow.model.Task;
+import snow.model.TaskList;
+
+/**
+ * Handles persistence of tasks to/from a file path.
+ * Saves a {@link TaskList} in a simple line-based format and loads it back.
+ */
 public class Storage {
     private final String filePath;
 
+    /**
+     * Creates a Storage that reads/writes at the given file path.
+     *
+     * @param filePath path to the save file
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
-    /** Save all tasks from taskList into the file. */
+    /** Saves all tasks from {@code taskList} into the file. */
     public void save(TaskList taskList) {
         try {
             File f = new File(filePath);
@@ -37,7 +49,7 @@ public class Storage {
         }
     }
 
-    /** Load tasks from the file into the given TaskList. */
+    /** Loads tasks from the file into the given {@code taskList}. */
     public void load(TaskList taskList) {
         try {
             File f = new File(filePath);
@@ -50,16 +62,18 @@ public class Storage {
                 }
             }
 
-
             if (!f.exists()) {
-                f.createNewFile();
+                // create empty file so future saves don't fail
+                if (!f.createNewFile()) {
+                    System.out.println("Warning: failed to create file " + f);
+                }
                 return; // nothing to load yet
             }
 
             try (Scanner sc = new Scanner(f)) {
                 while (sc.hasNextLine()) {
                     String line = sc.nextLine();
-                    Task task = Parser.parseLine(line);
+                    Task task = Parser.parseLine(line); // assumes Parser in same package
                     if (task != null) {
                         taskList.add(task);
                     }

@@ -1,31 +1,38 @@
 plugins {
     id 'java'
     id 'application'
+    id 'checkstyle'
 }
 
-group = 'snow'
-version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
 }
+
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
 }
 
-tasks.test {
+
+test {
     useJUnitPlatform()
+
     testLogging {
-        events "passed", "skipped", "failed"   // add "started" if you want start lines too
+        events "passed", "skipped", "failed"
+
+        showExceptions true
         exceptionFormat "full"
-        showStandardStreams = true             // print System.out/System.err from tests
+        showCauses true
+        showStackTraces true
+        showStandardStreams = false
     }
 }
 
 
+
 application {
-    mainClass = 'snow.Snow'   // <- your main class
+    mainClass.set("snow.model.Snow")
 }

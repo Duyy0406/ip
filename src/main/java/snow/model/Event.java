@@ -1,6 +1,9 @@
-package snow;
+package snow.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import snow.datetime.DateTime;
 
 /**
  * Represents an event task with a start and end date.
@@ -17,9 +20,9 @@ public class Event extends Task {
     /**
      * Creates an event with the specified description, start date, and end date.
      *
-     * @param name Description of the event.
-     * @param fromDate Start date of the event.
-     * @param toDate End date of the event.
+     * @param name     description of the event
+     * @param fromDate start datetime of the event (parsed from string)
+     * @param toDate   end datetime of the event (parsed from string)
      */
     public Event(String name, String fromDate, String toDate) {
         super(name);
@@ -27,10 +30,24 @@ public class Event extends Task {
         this.toDate = DateTime.parse(toDate);
     }
 
+    /**
+     * Creates an event with the specified description and datetimes.
+     *
+     * @param name     description of the event
+     * @param fromDate start datetime of the event
+     * @param toDate   end datetime of the event
+     */
     public Event(String name, LocalDateTime fromDate, LocalDateTime toDate) {
         super(name);
         this.fromDate = fromDate;
         this.toDate = toDate;
+    }
+
+    @Override
+    public boolean isOnDate(LocalDate date) {
+        LocalDate fromDate = this.fromDate.toLocalDate();
+        LocalDate toDate = this.toDate.toLocalDate();
+        return !(date.isBefore(fromDate)) && !(date.isAfter(toDate));
     }
 
     @Override

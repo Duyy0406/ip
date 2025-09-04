@@ -1,9 +1,13 @@
 package snow;
 
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
+import snow.model.TaskList;
+import snow.model.Todo;
 
 
 public class TaskListTest {
@@ -18,7 +22,7 @@ public class TaskListTest {
     }
 
     @Test
-    void mark_and_unmark_changeState() {
+    void markAndUnmarkChangeState() {
         TaskList list = new TaskList();
         Todo t = new Todo("read book");
         list.add(t);

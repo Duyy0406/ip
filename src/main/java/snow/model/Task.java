@@ -1,4 +1,6 @@
-package snow;
+package snow.model;
+
+import java.time.LocalDate;
 
 /**
  * Represents a task with a description and completion status.
@@ -7,10 +9,10 @@ package snow;
 public abstract class Task {
 
     /** Description of the task. */
-    final String name;
+    private final String name;
 
     /** Completion status of the task. */
-    boolean done;
+    private boolean done;
 
     /**
      * Creates a task with the specified description.
@@ -21,6 +23,7 @@ public abstract class Task {
     public Task(String name) {
         this.name = name;
         this.done = false;
+
     }
 
     /**
@@ -43,6 +46,12 @@ public abstract class Task {
     public void unmark() {
         this.done = false;
     }
+
+    /**
+     * Checks if this task is on a date
+     * @param date Date that needs to be checked
+     */
+    public abstract boolean isOnDate(LocalDate date);
 
     public String toSaveString() {
         return (this.done ? "1" : "0") + " | " + this.name;
