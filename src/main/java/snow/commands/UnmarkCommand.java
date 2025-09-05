@@ -12,6 +12,7 @@ import snow.model.TaskList;
  */
 public class UnmarkCommand extends Command {
 
+    private static final String UNMARK = "OK, I've marked this task as not done yet:";
     private final int index;
 
     /**
@@ -30,11 +31,13 @@ public class UnmarkCommand extends Command {
 
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws SnowException {
+        resetString();
         if (index >= tasks.size() || index < 0) {
             throw new SnowInvalidIndexException();
         }
         tasks.unmark(index);
         storage.save(tasks);
-        ui.printMark(tasks.get(index));
+        command.append(UNMARK).append('\n').append(tasks.get(index));
+        ui.printUnmark(tasks.get(index));
     }
 }

@@ -1,42 +1,35 @@
 package snow.gui;
 
+import java.io.IOException;
+
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import snow.model.Snow;
 
+/**
+ * A GUI for Snow using FXML.
+ */
 public class Main extends Application {
 
-    private ScrollPane scrollPane;
-    private VBox dialogContainer;
-    private TextField userInput;
-    private Button sendButton;
-    private Scene scene;
+    private Snow snow = new Snow();
 
     @Override
     public void start(Stage stage) {
-        //Setting up required components
-
-        scrollPane = new ScrollPane();
-        dialogContainer = new VBox();
-        scrollPane.setContent(dialogContainer);
-
-        userInput = new TextField();
-        sendButton = new Button("Send");
-
-        AnchorPane mainLayout = new AnchorPane();
-        mainLayout.getChildren().addAll(scrollPane, userInput, sendButton);
-
-        scene = new Scene(mainLayout);
-
-        stage.setScene(scene);
-        stage.show();
-
-        //More code to be added here later
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
+            AnchorPane ap = fxmlLoader.load();
+            Scene scene = new Scene(ap);
+            stage.setScene(scene);
+            stage.setMinHeight(220);
+            stage.setMinWidth(417);
+            fxmlLoader.<MainWindow>getController().setSnow(snow);  // inject the Snow instance
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

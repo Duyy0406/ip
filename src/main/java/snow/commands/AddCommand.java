@@ -18,6 +18,8 @@ import snow.model.Todo;
  */
 public class AddCommand extends Command {
 
+    private static final String ADD = "Got it. I've added this task:";
+
     private final TaskType type;
     private final String description;
     private final LocalDateTime by;
@@ -73,6 +75,7 @@ public class AddCommand extends Command {
 
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws SnowException {
+        resetString();
         if (description == null || description.isBlank()) {
             throw new SnowEmptyTaskException(this.type.toString());
         }
@@ -84,6 +87,13 @@ public class AddCommand extends Command {
         };
         tasks.add(task);
         storage.save(tasks);
+        command.append(ADD).append('\n').append("  ").append(task).append('\n').
+                append("Now you have ").append(tasks.size());
+        if (tasks.size() == 1) {
+            command.append(" task in your list");
+        } else {
+            command.append(" tasks in your list");
+        }
         ui.printAdd(task, tasks.size());
     }
 }

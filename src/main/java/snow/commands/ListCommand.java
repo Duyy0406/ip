@@ -1,6 +1,5 @@
 package snow.commands;
 
-import snow.exception.SnowException;
 import snow.io.Storage;
 import snow.io.Ui;
 import snow.model.TaskList;
@@ -10,8 +9,18 @@ import snow.model.TaskList;
  */
 public class ListCommand extends Command {
 
+    private static final String LIST = "Here are the tasks in your list:";
+
+
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) throws SnowException {
+    public void execute(TaskList tasks, Ui ui, Storage storage) {
+        resetString();
+        command.append(LIST);
+        for (int i = 0; i < tasks.size(); ++i) {
+            command.append("\n").append(i + 1).append(".").append(tasks.get(i));
+        }
         ui.printList(tasks);
     }
+
+
 }

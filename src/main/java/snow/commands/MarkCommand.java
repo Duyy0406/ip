@@ -12,6 +12,8 @@ import snow.model.TaskList;
  */
 public class MarkCommand extends Command {
 
+    private static final String MARK = "Nice! I've marked this task as done:";
+
     private final int index;
 
     /**
@@ -30,11 +32,13 @@ public class MarkCommand extends Command {
 
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws SnowException {
+        resetString();
         if (index >= tasks.size() || index < 0) {
             throw new SnowInvalidIndexException();
         }
         tasks.mark(index);
         storage.save(tasks);
+        command.append(MARK).append('\n').append(tasks.get(index));
         ui.printMark(tasks.get(index));
     }
 }

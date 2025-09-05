@@ -9,6 +9,8 @@ import snow.model.TaskList;
  * Represents the set of valid commands that can be issued by the user.
  */
 public abstract class Command {
+
+    protected StringBuilder command;
     /**
      * Executes the commands
      * @param tasks List of tasks
@@ -19,5 +21,20 @@ public abstract class Command {
 
     public boolean isExit() {
         return false;
+    }
+
+    /**
+     * Gets the String of the command.
+     * @return The String represents the command
+     */
+    public String getString() {
+        return command.toString();
+    }
+
+    /**
+     * Resets command string.
+     */
+    public void resetString() {
+        command = new StringBuilder();
     }
 }

@@ -16,17 +16,6 @@ public class Deadline extends Task {
     private final LocalDateTime date;
 
     /**
-     * Creates a deadline task with the specified description and due date.
-     *
-     * @param name Description of the deadline task
-     * @param date Due date of the deadline task (parsed from String)
-     */
-    public Deadline(String name, String date) {
-        super(name);
-        this.date = DateTime.parse(date);
-    }
-
-    /**
      * Creates a deadline with the specified description and datetime.
      * @param name Description of the deadline task
      * @param date Due date of the deadline task

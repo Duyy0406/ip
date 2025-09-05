@@ -65,14 +65,14 @@ public class Parser {
      * @throws SnowEmptyTaskException if the description is missing
      */
     public static Command splitDeadline(String description) throws SnowException {
-        String[] parts = description.split(" /by ", 2);
+        String[] parts = description.split("\\s*/by\\s*", 2);
         if (parts.length == 0 || parts[0].isBlank()) {
             throw new SnowEmptyTaskException("deadline");
         }
         if (parts.length == 1 || parts[1].isBlank()) {
             throw new SnowEmptyDateException("deadline");
         }
-        return AddCommand.deadline(parts[0], DateTime.parse(parts[1]));
+        return AddCommand.deadline(parts[0], DateTime.parse(parts[1].trim()));
     }
 
     /**
@@ -86,14 +86,14 @@ public class Parser {
      * @throws SnowEmptyTaskException if the description is missing
      */
     public static Command splitEvent(String description) throws SnowException {
-        String[] parts = description.split(" /from ", 2);
+        String[] parts = description.split("\\s*/from\\s*", 2);
         if (parts.length == 0 || parts[0].isBlank()) {
             throw new SnowEmptyTaskException("event");
         }
         if (parts.length == 1 || parts[1].isBlank()) {
             throw new SnowEmptyDateException("event");
         }
-        String[] dates = parts[1].split(" /to ", 2);
+        String[] dates = parts[1].split("\\s*/to\\s*", 2);
         if (dates.length < 2 || dates[0].isBlank() || dates[1].isBlank()) {
             throw new SnowEmptyDateException("event");
         }

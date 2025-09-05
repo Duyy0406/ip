@@ -18,8 +18,34 @@ public class Snow {
     /** Central list of tasks managed by the application. */
     private static final TaskList TASKS = new TaskList();
 
-    /** The file path for the storage */
+    /** The file path for the STORAGE */
     private static final String FILE_PATH = "data/snow.txt";
+
+    /** The Ui for printing */
+    private static final Ui UI = new Ui();
+
+    /** The Storage for saving data */
+    private static final Storage STORAGE = new Storage(FILE_PATH);
+
+    private String commandType;
+
+    /**
+     * Generates a response for the user's chat message.
+     */
+    public String getResponse(String input) {
+        try {
+            Command c = Parser.getCmd(input);
+            c.execute(TASKS, UI, STORAGE);
+            commandType = c.getClass().getSimpleName();
+            return c.getString();
+        } catch (SnowException e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
+    public String getCommandType() {
+        return commandType;
+    }
 
     /**
      * Runs the Snow application.
@@ -30,32 +56,30 @@ public class Snow {
      * @param args argument
      */
     public static void main(String[] args) {
-        Ui ui = new Ui();
-        ui.printLine();
-        ui.print("Hello! I'm " + NAME);
-        ui.print("What can I do for you?");
-        ui.printLine();
+        UI.printLine();
+        UI.print("Hello! I'm " + NAME);
+        UI.print("What can I do for you?");
+        UI.printLine();
 
-        Storage storage = new Storage(FILE_PATH);
-        storage.load(TASKS);
+        STORAGE.load(TASKS);
 
         while (true) {
-            String input = ui.getInput();
+            String input = UI.getInput();
             if (input == null) {
-                ui.printBye();
+                UI.printBye();
                 break;
             }
-            ui.printLine();
+            UI.printLine();
             try {
                 Command cmd = Parser.getCmd(input);
-                cmd.execute(TASKS, ui, storage);
+                cmd.execute(TASKS, UI, STORAGE);
                 if (cmd.isExit()) {
                     break;
                 }
             } catch (SnowException e) {
-                ui.print(e.getMessage());
+                UI.print(e.getMessage());
             }
-            ui.printLine();
+            UI.printLine();
         }
 
     }

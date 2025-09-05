@@ -13,6 +13,8 @@ import snow.model.TaskList;
  */
 public class DeleteCommand extends Command {
 
+    private static final String DELETE = "Noted. I've removed this task:";
+
     private final int index;
 
     /**
@@ -31,11 +33,14 @@ public class DeleteCommand extends Command {
 
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws SnowException {
+        resetString();
         if (index >= tasks.size() || index < 0) {
             throw new SnowInvalidIndexException();
         }
         Task removed = tasks.remove(index);
         storage.save(tasks);
+        command.append(DELETE).append('\n').append("  ").append(removed).append('\n').
+                append("Now you have ").append(tasks.size()).append(" tasks in your list");
         ui.printDelete(removed, tasks.size());
     }
 }

@@ -1,5 +1,8 @@
 package snow.datetime;
 
+import snow.exception.SnowException;
+import snow.exception.SnowInvalidDateException;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -29,7 +32,7 @@ public final class DateTime {
      * Parse a task: accept datetime or date.
      * If only a date is given, default to 23:59 (end of day).
      */
-    public static LocalDateTime parse(String input) {
+    public static LocalDateTime parse(String input) throws SnowException {
         input = input.trim();
         try {
             return LocalDateTime.parse(input, DT_FMT); // yyyy-MM-dd HHmm
@@ -46,7 +49,11 @@ public final class DateTime {
         } catch (Exception ignored) {
             // ignore exception
         }
-        return LocalDate.parse(input, DATE_ALT).atTime(DEFAULT_TIME);
+        try {
+            return LocalDate.parse(input, DATE_ALT).atTime(DEFAULT_TIME);
+        } catch (Exception e) {
+            throw new SnowInvalidDateException();
+        }
     }
 
 }

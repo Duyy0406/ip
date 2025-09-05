@@ -18,19 +18,6 @@ public class Event extends Task {
     private final LocalDateTime toDate;
 
     /**
-     * Creates an event with the specified description, start date, and end date.
-     *
-     * @param name     description of the event
-     * @param fromDate start datetime of the event (parsed from string)
-     * @param toDate   end datetime of the event (parsed from string)
-     */
-    public Event(String name, String fromDate, String toDate) {
-        super(name);
-        this.fromDate = DateTime.parse(fromDate);
-        this.toDate = DateTime.parse(toDate);
-    }
-
-    /**
      * Creates an event with the specified description and datetimes.
      *
      * @param name     description of the event

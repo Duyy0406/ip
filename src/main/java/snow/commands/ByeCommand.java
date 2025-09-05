@@ -10,9 +10,12 @@ import snow.model.TaskList;
  */
 public class ByeCommand extends Command {
 
+    private static final String BYE = "Bye! Stay cool and see u again soon!";
 
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws SnowException {
+        resetString();
+        command.append(BYE);
         ui.printBye();
     }
 
