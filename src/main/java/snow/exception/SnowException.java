@@ -9,7 +9,6 @@ public class SnowException extends Exception {
      * @param msg The exception message
      */
     public SnowException(String msg) {
-
         super(msg);
     }
 }

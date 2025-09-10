@@ -3,119 +3,91 @@ package snow.datetime;
 import snow.exception.SnowException;
 import snow.exception.SnowInvalidDateException;
 
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.Optional;
+import java.util.List;
 
 /**
- * Provides date and time parsing utilities for tasks.
- * Supports multiple input formats and provides consistent output formatting.
+ * Provides date and time for tasks.
  */
 public final class DateTime {
-    /** Output format for displaying dates and times. */
+    // output formats
     public static final DateTimeFormatter OUT_DT = DateTimeFormatter.ofPattern("MMM d yyyy h:mm a");
 
-    /** Default time (23:59) applied when only date is provided. */
+    // default time
     public static final LocalTime DEFAULT_TIME = LocalTime.of(23, 59);
 
-    /** Primary date format: yyyy-MM-dd. */
+    // input formats
     private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    
-    /** Alternative date format: d/M/yyyy. */
     private static final DateTimeFormatter DATE_ALT = DateTimeFormatter.ofPattern("d/M/yyyy");
-    
-    /** Primary datetime format: yyyy-MM-dd HHmm. */
-    private static final DateTimeFormatter DT_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-    
-    /** Alternative datetime format: d/M/yyyy HHmm. */
-    private static final DateTimeFormatter DT_ALT = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+    private static final DateTimeFormatter DT_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter DT_ALT = DateTimeFormatter.ofPattern("d/M/yyyy HH:mm");
+
+    // List of formats
+    private static final List<DateTimeFormatter> DATETIME_FORMATS = List.of(DT_FMT, DT_ALT);
+    private static final List<DateTimeFormatter> DATE_FORMATS = List.of(DATE_FMT, DATE_ALT);
 
     private DateTime() {
-        // Utility class - prevent instantiation
+
     }
 
     /**
-     * Parses a date/time string into LocalDateTime.
-     * Accepts datetime or date-only input. If only date is provided, 
-     * defaults to 23:59 (end of day).
-     *
-     * @param input the date/time string to parse
-     * @return parsed LocalDateTime
-     * @throws SnowException if input is invalid or cannot be parsed
+     * Parse a task: accept datetime or date.
+     * If only a date is given, default to 23:59 (end of day).
      */
     public static LocalDateTime parse(String input) throws SnowException {
-        validateInput(input);
-        String trimmedInput = input.trim();
-        
-        return tryParseDateTime(trimmedInput)
-                .or(() -> tryParseDate(trimmedInput))
-                .orElseThrow(SnowInvalidDateException::new);
-    }
-    
-    /**
-     * Validates the input string for parsing requirements.
-     *
-     * @param input the input to validate
-     * @throws SnowException if input is null or empty
-     */
-    private static void validateInput(String input) throws SnowException {
-        if (input == null || input.trim().isEmpty()) {
-            throw new SnowInvalidDateException();
+        assert input != null: "Date cannot be empty";
+        input = input.trim();
+        LocalDateTime dt = tryFormats(input, DATETIME_FORMATS, true);
+        if (dt != null) {
+            return dt;
         }
+        LocalDateTime d = tryFormats(input, DATE_FORMATS, false);
+        if (d != null) {
+            return d;
+        }
+        throw new SnowInvalidDateException();
     }
-    
     /**
-     * Attempts to parse input as LocalDateTime using available datetime formats.
-     *
-     * @param input the trimmed input string
-     * @return Optional containing parsed LocalDateTime, or empty if parsing fails
+     * Attempts to parse input as LocalDateTime using available formats.
      */
-    private static Optional<LocalDateTime> tryParseDateTime(String input) {
-        return tryParseWithFormat(() -> LocalDateTime.parse(input, DT_FMT))
-                .or(() -> tryParseWithFormat(() -> LocalDateTime.parse(input, DT_ALT)));
-    }
-    
-    /**
-     * Attempts to parse input as LocalDate and converts to LocalDateTime with default time.
-     *
-     * @param input the trimmed input string
-     * @return Optional containing parsed LocalDateTime, or empty if parsing fails
-     */
-    private static Optional<LocalDateTime> tryParseDate(String input) {
-        return tryParseWithFormat(() -> LocalDate.parse(input, DATE_FMT).atTime(DEFAULT_TIME))
-                .or(() -> tryParseWithFormat(() -> LocalDate.parse(input, DATE_ALT).atTime(DEFAULT_TIME)));
-    }
-    
-    /**
-     * Safely attempts parsing with the given parser function.
-     * Catches only DateTimeParseException to avoid masking other errors.
-     *
-     * @param parser the parsing function to execute
-     * @return Optional containing result if successful, empty if parsing fails
-     */
-    private static Optional<LocalDateTime> tryParseWithFormat(ParseFunction parser) {
+    private static LocalDateTime tryParseDateTime(String input, DateTimeFormatter format) {
         try {
-            return Optional.of(parser.parse());
-        } catch (DateTimeParseException e) {
-            return Optional.empty();
+            return LocalDateTime.parse(input, format);
+        } catch (Exception e) {
+            return null;
         }
     }
-    
+
     /**
-     * Functional interface for parsing operations.
+     * Attempts to parse input as LocalDate and convert to LocalDateTime.
      */
-    @FunctionalInterface
-    private interface ParseFunction {
-        /**
-         * Performs the parsing operation.
-         *
-         * @return parsed LocalDateTime
-         * @throws DateTimeParseException if parsing fails
-         */
-        LocalDateTime parse() throws DateTimeParseException;
+    private static LocalDateTime tryParseDate(String input, DateTimeFormatter format) {
+        try {
+            return LocalDate.parse(input, format).atTime(DEFAULT_TIME);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Attempts to parse input with list of formats
+     */
+    private static LocalDateTime tryFormats(String input,
+                                            List<DateTimeFormatter> formats,
+                                            boolean isDateTime) {
+        for (DateTimeFormatter f : formats) {
+            LocalDateTime date = isDateTime
+                    ? tryParseDateTime(input, f)
+                    : tryParseDate(input, f);
+            if (date != null) {
+                return date;
+            }
+        }
+        return null;
     }
 
 }
