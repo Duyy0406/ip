@@ -144,7 +144,6 @@ public class Parser {
             } else if ("D".equals(type)) {
                 t = new Deadline(name, LocalDateTime.parse(parts[3]));
             } else if ("E".equals(type)) {
-                // Fixed: end index should be parts[4], not parts[3]
                 t = new Event(name, LocalDateTime.parse(parts[3]), LocalDateTime.parse(parts[4]));
             }
 
@@ -153,7 +152,6 @@ public class Parser {
             }
             return t;
         } catch (Exception ex) {
-            // Return null if parsing fails to keep caller resilient.
             return null;
         }
     }
