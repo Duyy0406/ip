@@ -35,6 +35,7 @@ public class Snow {
     public String getResponse(String input) {
         try {
             Command c = Parser.getCmd(input);
+            assert c != null: "Parser must return a valid command";
             c.execute(TASKS, UI, STORAGE);
             commandType = c.getClass().getSimpleName();
             return c.getString();

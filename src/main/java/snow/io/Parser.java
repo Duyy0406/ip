@@ -55,6 +55,21 @@ public class Parser {
     }
 
     /**
+     * Validates that all required parts are present and non-blank.
+     *
+     * @param parts the parts to validate
+     * @return true if all parts are valid
+     */
+    private static boolean validateParts(String... parts) {
+        for (String part : parts) {
+            if (part == null || part.isBlank()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Builds an add-deadline command from the given description.
      *
      * <p>Expected format: {@code deadline <desc> /by <datetime>}.
@@ -66,10 +81,10 @@ public class Parser {
      */
     public static Command splitDeadline(String description) throws SnowException {
         String[] parts = description.split("\\s*/by\\s*", 2);
-        if (parts.length == 0 || parts[0].isBlank()) {
+        if (parts.length == 0 || !validateParts(parts[0])) {
             throw new SnowEmptyTaskException("deadline");
         }
-        if (parts.length == 1 || parts[1].isBlank()) {
+        if (parts.length == 1 || !validateParts(parts[1])) {
             throw new SnowEmptyDateException("deadline");
         }
         return AddCommand.deadline(parts[0], DateTime.parse(parts[1].trim()));
@@ -87,14 +102,14 @@ public class Parser {
      */
     public static Command splitEvent(String description) throws SnowException {
         String[] parts = description.split("\\s*/from\\s*", 2);
-        if (parts.length == 0 || parts[0].isBlank()) {
+        if (parts.length == 0 || !validateParts(parts[0])) {
             throw new SnowEmptyTaskException("event");
         }
-        if (parts.length == 1 || parts[1].isBlank()) {
+        if (parts.length == 1 || !validateParts(parts[1])) {
             throw new SnowEmptyDateException("event");
         }
         String[] dates = parts[1].split("\\s*/to\\s*", 2);
-        if (dates.length < 2 || dates[0].isBlank() || dates[1].isBlank()) {
+        if (dates.length < 2 || !validateParts(parts[0], parts[1])) {
             throw new SnowEmptyDateException("event");
         }
         String fromDate = dates[0].trim();
@@ -129,7 +144,6 @@ public class Parser {
             } else if ("D".equals(type)) {
                 t = new Deadline(name, LocalDateTime.parse(parts[3]));
             } else if ("E".equals(type)) {
-                // Fixed: end index should be parts[4], not parts[3]
                 t = new Event(name, LocalDateTime.parse(parts[3]), LocalDateTime.parse(parts[4]));
             }
 
@@ -138,7 +152,6 @@ public class Parser {
             }
             return t;
         } catch (Exception ex) {
-            // Return null if parsing fails to keep caller resilient.
             return null;
         }
     }
