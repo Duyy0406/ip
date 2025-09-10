@@ -60,13 +60,13 @@ public class Parser {
      * @param parts the parts to validate
      * @return true if all parts are valid
      */
-    private static boolean validateParts(String... parts) {
+    private static boolean isInvalid(String... parts) {
         for (String part : parts) {
             if (part == null || part.isBlank()) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     /**
@@ -81,10 +81,10 @@ public class Parser {
      */
     public static Command splitDeadline(String description) throws SnowException {
         String[] parts = description.split("\\s*/by\\s*", 2);
-        if (parts.length == 0 || !validateParts(parts[0])) {
+        if (parts.length == 0 || isInvalid(parts[0])) {
             throw new SnowEmptyTaskException("deadline");
         }
-        if (parts.length == 1 || !validateParts(parts[1])) {
+        if (parts.length == 1 || isInvalid(parts[1])) {
             throw new SnowEmptyDateException("deadline");
         }
         return AddCommand.deadline(parts[0], DateTime.parse(parts[1].trim()));
@@ -102,14 +102,14 @@ public class Parser {
      */
     public static Command splitEvent(String description) throws SnowException {
         String[] parts = description.split("\\s*/from\\s*", 2);
-        if (parts.length == 0 || !validateParts(parts[0])) {
+        if (parts.length == 0 || isInvalid(parts[0])) {
             throw new SnowEmptyTaskException("event");
         }
-        if (parts.length == 1 || !validateParts(parts[1])) {
+        if (parts.length == 1 || isInvalid(parts[1])) {
             throw new SnowEmptyDateException("event");
         }
         String[] dates = parts[1].split("\\s*/to\\s*", 2);
-        if (dates.length < 2 || !validateParts(parts[0], parts[1])) {
+        if (dates.length < 2 || isInvalid(parts[0], parts[1])) {
             throw new SnowEmptyDateException("event");
         }
         String fromDate = dates[0].trim();
