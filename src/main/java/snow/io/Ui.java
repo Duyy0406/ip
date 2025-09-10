@@ -13,6 +13,8 @@ import snow.model.TaskList;
  * mark/unmark, find and farewell messages.
  */
 public class Ui {
+    private static final String NAME = "Snow";
+    private static final String GREETING = "Hello! I'm" + NAME + "\nWhat can I do for you?";
     private static final String LIST = "Here are the tasks in your list:";
     private static final String MARK = "Nice! I've marked this task as done:";
     private static final String UNMARK = "OK, I've marked this task as not done yet:";
@@ -51,6 +53,15 @@ public class Ui {
      */
     public String getInput() {
         return sc.hasNextLine() ? sc.nextLine() : null;
+    }
+
+    /**
+     * Prints the greeting.
+     */
+    public void printGreeting() {
+        printLine();
+        print(GREETING);
+        printLine();
     }
 
     /**
