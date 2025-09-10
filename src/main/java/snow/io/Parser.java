@@ -151,7 +151,7 @@ public class Parser {
                 t.mark();
             }
             return t;
-        } catch (Exception ex) {
+        } catch (Exception e) {
             return null;
         }
     }

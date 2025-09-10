@@ -12,9 +12,6 @@ import snow.io.Ui;
  */
 public class Snow {
 
-    /** Display name of the assistant. */
-    private static final String NAME = "snow";
-
     /** Central list of tasks managed by the application. */
     private static final TaskList TASKS = new TaskList();
 
@@ -28,6 +25,10 @@ public class Snow {
     private static final Storage STORAGE = new Storage(FILE_PATH);
 
     private String commandType;
+
+    public Snow() {
+        STORAGE.load(TASKS);
+    }
 
     /**
      * Generates a response for the user's chat message.
@@ -56,12 +57,7 @@ public class Snow {
      * @param args argument
      */
     public static void main(String[] args) {
-        UI.printLine();
-        UI.print("Hello! I'm " + NAME);
-        UI.print("What can I do for you?");
-        UI.printLine();
-
-        STORAGE.load(TASKS);
+        UI.printGreeting();
 
         while (true) {
             String input = UI.getInput();
