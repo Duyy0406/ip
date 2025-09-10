@@ -9,7 +9,6 @@ public class SnowEmptyTaskException extends SnowException {
      * @param type The type of task that has an empty description
      */
     public SnowEmptyTaskException(String type) {
-
         super("Oops! The description of " + type + " cannot be empty!");
     }
 }

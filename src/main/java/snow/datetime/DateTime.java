@@ -3,10 +3,12 @@ package snow.datetime;
 import snow.exception.SnowException;
 import snow.exception.SnowInvalidDateException;
 
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  * Provides date and time for tasks.
@@ -21,8 +23,12 @@ public final class DateTime {
     // input formats
     private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final DateTimeFormatter DATE_ALT = DateTimeFormatter.ofPattern("d/M/yyyy");
-    private static final DateTimeFormatter DT_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-    private static final DateTimeFormatter DT_ALT = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+    private static final DateTimeFormatter DT_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter DT_ALT = DateTimeFormatter.ofPattern("d/M/yyyy HH:mm");
+
+    // List of formats
+    private static final List<DateTimeFormatter> DATETIME_FORMATS = List.of(DT_FMT, DT_ALT);
+    private static final List<DateTimeFormatter> DATE_FORMATS = List.of(DATE_FMT, DATE_ALT);
 
     private DateTime() {
 
@@ -33,27 +39,55 @@ public final class DateTime {
      * If only a date is given, default to 23:59 (end of day).
      */
     public static LocalDateTime parse(String input) throws SnowException {
+        assert input != null: "Date cannot be empty";
         input = input.trim();
-        try {
-            return LocalDateTime.parse(input, DT_FMT); // yyyy-MM-dd HHmm
-        } catch (Exception ignored) {
-            // ignore exception
+        LocalDateTime dt = tryFormats(input, DATETIME_FORMATS, true);
+        if (dt != null) {
+            return dt;
         }
-        try {
-            return LocalDateTime.parse(input, DT_ALT); // d/M/yyyy HHmm
-        } catch (Exception ignored) {
-            // ignore exception
+        LocalDateTime d = tryFormats(input, DATE_FORMATS, false);
+        if (d != null) {
+            return d;
         }
+        throw new SnowInvalidDateException();
+    }
+    /**
+     * Attempts to parse input as LocalDateTime using available formats.
+     */
+    private static LocalDateTime tryParseDateTime(String input, DateTimeFormatter format) {
         try {
-            return LocalDate.parse(input, DATE_FMT).atTime(DEFAULT_TIME);
-        } catch (Exception ignored) {
-            // ignore exception
-        }
-        try {
-            return LocalDate.parse(input, DATE_ALT).atTime(DEFAULT_TIME);
+            return LocalDateTime.parse(input, format);
         } catch (Exception e) {
-            throw new SnowInvalidDateException();
+            return null;
         }
+    }
+
+    /**
+     * Attempts to parse input as LocalDate and convert to LocalDateTime.
+     */
+    private static LocalDateTime tryParseDate(String input, DateTimeFormatter format) {
+        try {
+            return LocalDate.parse(input, format).atTime(DEFAULT_TIME);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Attempts to parse input with list of formats
+     */
+    private static LocalDateTime tryFormats(String input,
+                                            List<DateTimeFormatter> formats,
+                                            boolean isDateTime) {
+        for (DateTimeFormatter f : formats) {
+            LocalDateTime date = isDateTime
+                    ? tryParseDateTime(input, f)
+                    : tryParseDate(input, f);
+            if (date != null) {
+                return date;
+            }
+        }
+        return null;
     }
 
 }
