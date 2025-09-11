@@ -23,8 +23,8 @@ public class Ui {
     private static final String DELETE = "Noted. I've removed this task:";
     private static final String FIND = "Here are the matching tasks in your list:";
     private static final String BYE = "Bye! Stay cool and see u again soon!";
-    private static final String GREETING = "Hello! I'm" + NAME
-            + "\n" + INDENT + "What can I do for you?";
+    private static final String GREETING = "Hello! I'm " + NAME;
+    private static final String ASK = "What can I do for you?";
 
     private final Scanner sc;
 
@@ -62,6 +62,7 @@ public class Ui {
     public void printGreeting() {
         printLine();
         print(GREETING);
+        print(ASK);
         printLine();
     }
 
@@ -73,7 +74,7 @@ public class Ui {
     public void printList(TaskList tasks) {
         print(LIST);
         for (int i = 0; i < tasks.size(); ++i) {
-            print((i + 1) + "." + tasks.get(i));
+            print("  " + (i + 1) + "." + tasks.get(i));
         }
     }
 
