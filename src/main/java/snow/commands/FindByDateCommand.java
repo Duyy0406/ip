@@ -10,7 +10,7 @@ import snow.model.Task;
 import snow.model.TaskList;
 
 /**
- * Represents the Find command.
+ * Represents the FindByDate command.
  */
 public class FindByDateCommand extends Command {
 
