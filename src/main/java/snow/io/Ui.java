@@ -14,7 +14,6 @@ import snow.model.TaskList;
  */
 public class Ui {
     private static final String NAME = "Snow";
-    private static final String GREETING = "Hello! I'm" + NAME + "\nWhat can I do for you?";
     private static final String LIST = "Here are the tasks in your list:";
     private static final String MARK = "Nice! I've marked this task as done:";
     private static final String UNMARK = "OK, I've marked this task as not done yet:";
@@ -24,6 +23,8 @@ public class Ui {
     private static final String DELETE = "Noted. I've removed this task:";
     private static final String FIND = "Here are the matching tasks in your list:";
     private static final String BYE = "Bye! Stay cool and see u again soon!";
+    private static final String GREETING = "Hello! I'm" + NAME
+            + "\n" + INDENT + "What can I do for you?";
 
     private final Scanner sc;
 
