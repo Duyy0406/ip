@@ -7,7 +7,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
 import snow.model.Snow;
 
 /**
@@ -26,7 +25,7 @@ public class Main extends Application {
             stage.setScene(scene);
             stage.setMinHeight(220);
             stage.setMinWidth(417);
-            fxmlLoader.<MainWindow>getController().setSnow(snow);  // inject the Snow instance
+            fxmlLoader.<MainWindow>getController().setSnow(snow); // inject the Snow instance
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

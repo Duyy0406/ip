@@ -1,14 +1,13 @@
 package snow.datetime;
 
-import snow.exception.SnowException;
-import snow.exception.SnowInvalidDateException;
-
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import snow.exception.SnowException;
+import snow.exception.SnowInvalidDateException;
 
 /**
  * Provides date and time for tasks.
@@ -39,7 +38,7 @@ public final class DateTime {
      * If only a date is given, default to 23:59 (end of day).
      */
     public static LocalDateTime parse(String input) throws SnowException {
-        assert input != null: "Date cannot be empty";
+        assert input != null : "Date cannot be empty";
         input = input.trim();
         LocalDateTime dt = tryFormats(input, DATETIME_FORMATS, true);
         if (dt != null) {

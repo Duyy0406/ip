@@ -39,8 +39,8 @@ public class DeleteCommand extends Command {
         }
         Task removed = tasks.remove(index);
         storage.save(tasks);
-        command.append(DELETE).append('\n').append("  ").append(removed).append('\n').
-                append("Now you have ").append(tasks.size()).append(" tasks in your list");
+        command.append(DELETE).append('\n').append("  ").append(removed).append('\n')
+                .append("Now you have ").append(tasks.size()).append(" tasks in your list");
         ui.printDelete(removed, tasks.size());
     }
 }

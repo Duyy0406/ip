@@ -87,8 +87,8 @@ public class AddCommand extends Command {
         };
         tasks.add(task);
         storage.save(tasks);
-        command.append(ADD).append('\n').append("  ").append(task).append('\n').
-                append("Now you have ").append(tasks.size());
+        command.append(ADD).append('\n').append("  ").append(task).append('\n')
+                .append("Now you have ").append(tasks.size());
         if (tasks.size() == 1) {
             command.append(" task in your list");
         } else {

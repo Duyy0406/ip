@@ -21,7 +21,7 @@ public abstract class Task {
      * @param name Description of the task.
      */
     public Task(String name) {
-        assert name != null && !name.trim().isEmpty(): "Task name cannot be empty or blank";
+        assert name != null && !name.trim().isEmpty() : "Task name cannot be empty or blank";
 
         this.name = name;
         this.done = false;
