@@ -26,6 +26,14 @@ import snow.model.Todo;
 public class Parser {
 
     /**
+     * Returns the task description and place name.
+     * @param description Input string including place
+     */
+    public static String[] parsePlace(String description) {
+        return description.split("\\s*/at\\s*", 2);
+    }
+
+    /**
      * Returns the command type from a given user input string.
      *
      * @param cmd User input string.
@@ -39,7 +47,6 @@ public class Parser {
         }
         String firstWord = parts[0];
         String description = (parts.length == 1) ? "" : parts[1];
-
         return switch (firstWord) {
         case "todo" -> AddCommand.todo(description);
         case "deadline" -> splitDeadline(description);
@@ -114,6 +121,9 @@ public class Parser {
         }
         String fromDate = dates[0].trim();
         String toDate = dates[1].trim();
+
+        String[] atParts = parts[0].split("\\s*/at\\s*", 2);
+
         return AddCommand.event(parts[0], DateTime.parse(fromDate), DateTime.parse(toDate));
     }
 

@@ -4,10 +4,13 @@ import java.time.LocalDateTime;
 
 import snow.exception.SnowEmptyTaskException;
 import snow.exception.SnowException;
+import snow.io.Parser;
 import snow.io.Storage;
 import snow.io.Ui;
 import snow.model.Deadline;
 import snow.model.Event;
+import snow.model.Place;
+import snow.model.PlaceRegistry;
 import snow.model.Task;
 import snow.model.TaskList;
 import snow.model.TaskType;
@@ -79,12 +82,15 @@ public class AddCommand extends Command {
         if (description == null || description.isBlank()) {
             throw new SnowEmptyTaskException(this.type.toString());
         }
-
+        String[] parts = Parser.parsePlace(description);
+        String taskName = parts[0];
+        Place place = (parts.length == 1) ? Place.NONE : PlaceRegistry.getPlace(parts[1]);
         Task task = switch (type) {
-        case TODO -> new Todo(this.description);
-        case DEADLINE -> new Deadline(this.description, this.by);
-        case EVENT -> new Event(this.description, this.from, this.to);
+        case TODO -> new Todo(taskName);
+        case DEADLINE -> new Deadline(taskName, this.by);
+        case EVENT -> new Event(taskName, this.from, this.to);
         };
+        task.setPlace(place);
         tasks.add(task);
         storage.save(tasks);
         command.append(ADD).append('\n').append("  ").append(task).append('\n')

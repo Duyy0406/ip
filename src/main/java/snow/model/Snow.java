@@ -51,7 +51,6 @@ public class Snow {
 
     /**
      * Runs the Snow application.
-     *
      * Initializes the user interface, greets the user, and processes commands
      * until the user exits.
      *

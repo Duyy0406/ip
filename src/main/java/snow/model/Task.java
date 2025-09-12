@@ -14,6 +14,8 @@ public abstract class Task {
     /** Completion status of the task. */
     private boolean done;
 
+    private Place place = Place.NONE;
+
     /**
      * Creates a task with the specified description.
      * The task is initially not marked as done.
@@ -25,7 +27,6 @@ public abstract class Task {
 
         this.name = name;
         this.done = false;
-
     }
 
     /**
@@ -56,15 +57,36 @@ public abstract class Task {
     public abstract boolean isOnDate(LocalDate date);
 
     public String toSaveString() {
-        return (this.done ? "1" : "0") + " | " + this.name;
+        String base = (this.done ? "1" : "0") + " | " + this.name;
+        if (place != null) {
+            base += " | at=" + place.getName() + " | pid=" + place.getId();
+        }
+        return base;
     }
 
     public boolean isDone() {
         return this.done;
     }
 
+    /**
+     * Checks if this task has a place attached to it.
+     */
+    public boolean hasPlace() {
+        return place != Place.NONE;
+    }
+
+    /**
+     * Sets this task's place to a place.
+     * @param place Place that this task is attached to
+     */
+    public void setPlace(Place place) {
+        this.place = place;
+    }
+
+
     @Override
     public String toString() {
-        return (done ? "[X] " : "[ ] ") + name;
+        return (done ? "[X] " : "[ ] ") + name
+                + ((place != Place.NONE) ? " at " + place : "");
     }
 }
