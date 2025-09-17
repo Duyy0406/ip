@@ -6,6 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+import snow.model.Place;
+import snow.model.PlaceRegistry;
 import snow.model.Task;
 import snow.model.TaskList;
 
@@ -39,6 +41,13 @@ public class Storage {
             }
 
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
+                // Save places first
+                for (Place place : PlaceRegistry.getPlaces()) {
+                    bw.write(place.toSaveString());
+                    bw.newLine();
+                }
+
+                // Then save tasks
                 for (int i = 0; i < taskList.size(); i++) {
                     bw.write(taskList.get(i).toSaveString());
                     bw.newLine();
@@ -70,10 +79,22 @@ public class Storage {
                 return; // nothing to load yet
             }
 
+            // Clear existing places before loading
+            PlaceRegistry.clearPlaces();
+
             try (Scanner sc = new Scanner(f)) {
                 while (sc.hasNextLine()) {
                     String line = sc.nextLine();
-                    Task task = Parser.parseLine(line); // assumes Parser in same package
+
+                    // Try to parse as place first
+                    Place place = Parser.parsePlaceFromStorage(line);
+                    if (place != null) {
+                        PlaceRegistry.addPlace(place);
+                        continue;
+                    }
+
+                    // Otherwise parse as task
+                    Task task = Parser.parseLine(line);
                     if (task != null) {
                         taskList.add(task);
                     }

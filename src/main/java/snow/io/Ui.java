@@ -3,6 +3,7 @@ package snow.io;
 import java.util.List;
 import java.util.Scanner;
 
+import snow.model.Place;
 import snow.model.Task;
 import snow.model.TaskList;
 
@@ -137,5 +138,21 @@ public class Ui {
     /** Prints the exit message. */
     public void printBye() {
         print(BYE);
+    }
+
+    /**
+     * Prints all saved places.
+     *
+     * @param places the list of places to display
+     */
+    public void printPlaces(List<Place> places) {
+        print("Here are all the saved places:");
+        if (places.isEmpty()) {
+            print("No places have been saved yet.");
+        } else {
+            for (int i = 0; i < places.size(); i++) {
+                print((i + 1) + ". " + places.get(i).getName());
+            }
+        }
     }
 }

@@ -4,12 +4,17 @@ package snow.model;
  * Represents the places.
  */
 public class Place {
-    private final int id;
-    private String name;
-
     /** Sentinel */
     public static final Place NONE = new Place(-1, "");
 
+    private final int id;
+    private String name;
+
+    /**
+     * Constructs a Place with the given id and name.
+     * @param id The unique identifier for this place.
+     * @param name The name of this place.
+     */
     public Place(int id, String name) {
         this.id = id;
         this.name = name;

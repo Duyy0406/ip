@@ -9,6 +9,7 @@ import snow.commands.DeleteCommand;
 import snow.commands.FindCommand;
 import snow.commands.ListCommand;
 import snow.commands.MarkCommand;
+import snow.commands.PlacesCommand;
 import snow.commands.UnmarkCommand;
 import snow.datetime.DateTime;
 import snow.exception.SnowEmptyDateException;
@@ -17,6 +18,8 @@ import snow.exception.SnowException;
 import snow.exception.SnowInvalidCommandException;
 import snow.model.Deadline;
 import snow.model.Event;
+import snow.model.Place;
+import snow.model.PlaceRegistry;
 import snow.model.Task;
 import snow.model.Todo;
 
@@ -56,6 +59,7 @@ public class Parser {
         case "list" -> new ListCommand();
         case "delete" -> new DeleteCommand(description);
         case "find" -> new FindCommand(description);
+        case "places" -> new PlacesCommand();
         case "bye" -> new ByeCommand();
         default -> throw new SnowInvalidCommandException();
         };
@@ -122,7 +126,6 @@ public class Parser {
         String fromDate = dates[0].trim();
         String toDate = dates[1].trim();
 
-        String[] atParts = parts[0].split("\\s*/at\\s*", 2);
 
         return AddCommand.event(parts[0], DateTime.parse(fromDate), DateTime.parse(toDate));
     }
@@ -157,10 +160,48 @@ public class Parser {
                 t = new Event(name, LocalDateTime.parse(parts[3]), LocalDateTime.parse(parts[4]));
             }
 
-            if (t != null && isDone) {
-                t.mark();
+            if (t != null) {
+                if (isDone) {
+                    t.mark();
+                }
+
+                // Handle place information if present
+                for (int i = 3; i < parts.length; i++) {
+                    String part = parts[i];
+                    if (part.startsWith("pid=")) {
+                        int placeId = Integer.parseInt(part.substring(4));
+                        if (placeId != -1) { // -1 means no place
+                            Place place = PlaceRegistry.findById(placeId);
+                            if (place != null) {
+                                t.setPlace(place);
+                            }
+                        }
+                        break;
+                    }
+                }
             }
             return t;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Parses a place from a storage line.
+     *
+     * @param line serialized place line
+     * @return a {@link Place} instance, or {@code null} if not a place or parsing fails
+     */
+    public static Place parsePlaceFromStorage(String line) {
+        try {
+            String[] parts = line.split(" \\| ");
+
+            if (parts.length >= 3 && "P".equals(parts[0])) {
+                int id = Integer.parseInt(parts[1]);
+                String name = parts[2];
+                return new Place(id, name);
+            }
+            return null;
         } catch (Exception e) {
             return null;
         }

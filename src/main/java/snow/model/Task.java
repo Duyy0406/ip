@@ -56,6 +56,10 @@ public abstract class Task {
      */
     public abstract boolean isOnDate(LocalDate date);
 
+    /**
+     * Returns the string representation of this task for saving to storage.
+     * @return A formatted string containing task data for persistence.
+     */
     public String toSaveString() {
         String base = (this.done ? "1" : "0") + " | " + this.name;
         if (place != null) {
