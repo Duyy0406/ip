@@ -208,55 +208,98 @@ public class Parser {
     public static Task parseLine(String line) {
         try {
             String[] parts = line.split(" \\| ");
+            if (!isValidLineFormat(parts)) {
+                return null;
+            }
 
             String type = parts[0];
-            String statusStr = parts[1];
-
-            // Strict validation: only accept "0" or "1"
-            if (!"0".equals(statusStr) && !"1".equals(statusStr)) {
-                return null; // Invalid status value
-            }
-
-            boolean isDone = "1".equals(statusStr);
+            boolean isDone = parseStatus(parts[1]);
             String name = parts[2];
 
-            Task t = null;
-            if ("T".equals(type)) {
-                t = new Todo(name);
-            } else if ("D".equals(type)) {
-                // For deadline, find the date (it should be the last part)
-                String dateStr = parts[parts.length - 1];
-                t = new Deadline(name, LocalDateTime.parse(dateStr));
-            } else if ("E".equals(type)) {
-                // For event, find the start and end dates (last two parts)
-                String startStr = parts[parts.length - 2];
-                String endStr = parts[parts.length - 1];
-                t = new Event(name, LocalDateTime.parse(startStr), LocalDateTime.parse(endStr));
+            Task task = createTaskByType(type, name, parts);
+            if (task == null) {
+                return null;
             }
 
-            if (t != null) {
-                if (isDone) {
-                    t.mark();
-                }
-
-                // Handle place information if present
-                for (int i = 3; i < parts.length; i++) {
-                    String part = parts[i];
-                    if (part.startsWith("pid=")) {
-                        int placeId = Integer.parseInt(part.substring(4));
-                        if (placeId != -1) { // -1 means no place
-                            Place place = PlaceRegistry.findById(placeId);
-                            if (place != null) {
-                                t.setPlace(place);
-                            }
-                        }
-                        break;
-                    }
-                }
+            if (isDone) {
+                task.mark();
             }
-            return t;
+
+            attachPlaceToTask(task, parts);
+            return task;
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    /**
+     * Validates the basic format of a parsed line.
+     */
+    private static boolean isValidLineFormat(String[] parts) {
+        return parts.length >= 3;
+    }
+
+    /**
+     * Parses the status string into a boolean.
+     */
+    private static boolean parseStatus(String statusStr) {
+        if (!"0".equals(statusStr) && !"1".equals(statusStr)) {
+            throw new IllegalArgumentException("Invalid status: " + statusStr);
+        }
+        return "1".equals(statusStr);
+    }
+
+    /**
+     * Creates a task based on the type and parts array.
+     */
+    private static Task createTaskByType(String type, String name, String[] parts) {
+        return switch (type) {
+        case "T" -> new Todo(name);
+        case "D" -> createDeadlineTask(name, parts);
+        case "E" -> createEventTask(name, parts);
+        default -> null;
+        };
+    }
+
+    /**
+     * Creates a deadline task from parsed parts.
+     */
+    private static Task createDeadlineTask(String name, String[] parts) {
+        if (parts.length < 4) {
+            return null;
+        }
+        String dateStr = parts[parts.length - 1];
+        return new Deadline(name, LocalDateTime.parse(dateStr));
+    }
+
+    /**
+     * Creates an event task from parsed parts.
+     */
+    private static Task createEventTask(String name, String[] parts) {
+        if (parts.length < 5) {
+            return null;
+        }
+        String startStr = parts[parts.length - 2];
+        String endStr = parts[parts.length - 1];
+        return new Event(name, LocalDateTime.parse(startStr), LocalDateTime.parse(endStr));
+    }
+
+    /**
+     * Attaches place information to a task if present in the parts.
+     */
+    private static void attachPlaceToTask(Task task, String[] parts) {
+        for (int i = 3; i < parts.length; i++) {
+            String part = parts[i];
+            if (part.startsWith("pid=")) {
+                int placeId = Integer.parseInt(part.substring(4));
+                if (placeId != -1) { 
+                    Place place = PlaceRegistry.findById(placeId);
+                    if (place != null) {
+                        task.setPlace(place);
+                    }
+                }
+                break;
+            }
         }
     }
 
