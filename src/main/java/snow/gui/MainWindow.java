@@ -1,5 +1,6 @@
 package snow.gui;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -45,11 +46,22 @@ public class MainWindow extends AnchorPane {
         String input = userInput.getText();
         String response = snow.getResponse(input);
         String commandType = snow.getCommandType();
-        dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input, userImage),
-                DialogBox.getSnowDialog(response, snowImage, commandType)
-        );
+
+        dialogContainer.getChildren().add(DialogBox.getUserDialog(input, userImage));
+
+        // Check if response is an error
+        if (response.startsWith("Error:")) {
+            dialogContainer.getChildren().add(DialogBox.getErrorDialog(response, snowImage));
+        } else {
+            dialogContainer.getChildren().add(DialogBox.getSnowDialog(response, snowImage, commandType));
+        }
+
         userInput.clear();
+
+        // Check if the command indicates we should exit
+        if (snow.shouldExit()) {
+            Platform.exit();
+        }
     }
 }
 

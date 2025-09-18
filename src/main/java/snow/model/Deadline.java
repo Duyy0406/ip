@@ -27,7 +27,7 @@ public class Deadline extends Task {
 
     @Override
     public boolean isOnDate(LocalDate date) {
-        return !date.isAfter(this.date.toLocalDate());
+        return date.isEqual(this.date.toLocalDate());
     }
 
     @Override

@@ -1,11 +1,13 @@
 package snow.io;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import snow.commands.AddCommand;
 import snow.commands.ByeCommand;
 import snow.commands.Command;
 import snow.commands.DeleteCommand;
+import snow.commands.FindByDateCommand;
 import snow.commands.FindCommand;
 import snow.commands.ListCommand;
 import snow.commands.MarkCommand;
@@ -59,6 +61,7 @@ public class Parser {
         case "list" -> new ListCommand();
         case "delete" -> new DeleteCommand(description);
         case "find" -> new FindCommand(description);
+        case "findbydate" -> createFindByDateCommand(description);
         case "places" -> new PlacesCommand();
         case "bye" -> new ByeCommand();
         default -> throw new SnowInvalidCommandException();
@@ -78,6 +81,30 @@ public class Parser {
             }
         }
         return false;
+    }
+
+    /**
+     * Creates a FindByDateCommand from the given date description.
+     *
+     * <p>Expected format: {@code findbydate <date>} where date can be in YYYY-MM-DD or D/M/YYYY format.
+     *
+     * @param description the date description
+     * @return a FindByDateCommand for the specified date
+     * @throws SnowException if the date format is invalid
+     */
+    private static FindByDateCommand createFindByDateCommand(String description) throws SnowException {
+        if (description == null || description.isBlank()) {
+            throw new SnowEmptyDateException("findbydate");
+        }
+
+        try {
+            // Use DateTime parser to support same formats as other commands
+            LocalDateTime dateTime = DateTime.parse(description.trim());
+            LocalDate date = dateTime.toLocalDate();
+            return new FindByDateCommand(date);
+        } catch (Exception e) {
+            throw new SnowEmptyDateException("findbydate - use YYYY-MM-DD or D/M/YYYY format");
+        }
     }
 
     /**

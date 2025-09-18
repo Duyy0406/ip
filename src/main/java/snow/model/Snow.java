@@ -25,6 +25,7 @@ public class Snow {
     private static final Storage STORAGE = new Storage(FILE_PATH);
 
     private String commandType;
+    private boolean shouldExit = false;
 
     public Snow() {
         STORAGE.load(TASKS);
@@ -39,6 +40,7 @@ public class Snow {
             assert c != null : "Parser must return a valid command";
             c.execute(TASKS, UI, STORAGE);
             commandType = c.getClass().getSimpleName();
+            shouldExit = c.isExit();
             return c.getString();
         } catch (SnowException e) {
             return "Error: " + e.getMessage();
@@ -47,6 +49,10 @@ public class Snow {
 
     public String getCommandType() {
         return commandType;
+    }
+
+    public boolean shouldExit() {
+        return shouldExit;
     }
 
     /**

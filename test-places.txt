@@ -1,0 +1,6 @@
+todo buy groceries /at supermarket
+todo study /at library  
+deadline submit assignment /by 2025-12-01 23:59 /at home
+places
+list
+bye

@@ -1,40 +1,81 @@
 .label {
-    background:white;
+    background: white;
     -fx-background-color: background;
     -fx-border-color: #d55e00 #009e73 #cc79a7 #0072b2;
-    -fx-border-width: 2px;
-    -fx-background-radius: 1em 1em 0 1em;
-    -fx-border-radius: 1em 1em 0 1em;
+    -fx-border-width: 1px;
+    -fx-background-radius: 15px 15px 5px 15px;
+    -fx-border-radius: 15px 15px 5px 15px;
     -fx-text-fill: ladder(background, white 49%, black 50%);
+    -fx-font-size: 14px;
+    -fx-max-width: 320px;
+    -fx-wrap-text: true;
 }
 
 .reply-label {
-    -fx-background-radius: 1em 1em 1em 0;
-    -fx-border-radius: 1em 1em 1em 0;
+    -fx-background-radius: 15px 15px 15px 5px;
+    -fx-border-radius: 15px 15px 15px 5px;
 }
 
 .add-label {
-    -fx-background-color: yellow;
+    -fx-background-color: #e8f5e8;
+    -fx-border-color: #4caf50;
 }
 
 .marked-label {
-    -fx-background-color: palegreen;
+    -fx-background-color: #e8f4fd;
+    -fx-border-color: #2196f3;
 }
 
 .delete-label {
-    -fx-background-color: lightpink;
+    -fx-background-color: #ffeaea;
+    -fx-border-color: #f44336;
 }
 
+.unmark-label {
+    -fx-background-color: #fff3e0;
+    -fx-border-color: #ff9800;
+}
+
+.list-label {
+    -fx-background-color: #f3e5f5;
+    -fx-border-color: #9c27b0;
+}
+
+.find-label {
+    -fx-background-color: #e0f2f1;
+    -fx-border-color: #009688;
+}
+
+.findbydate-label {
+    -fx-background-color: #e8eaf6;
+    -fx-border-color: #3f51b5;
+}
+
+.places-label {
+    -fx-background-color: #fce4ec;
+    -fx-border-color: #e91e63;
+}
+
+.bye-label {
+    -fx-background-color: #f1f8e9;
+    -fx-border-color: #8bc34a;
+}
+
+.error-label {
+    -fx-background-color: #ffebee;
+    -fx-border-color: #e91e63;
+    -fx-text-fill: #c62828;
+}
 
 #displayPicture {
-    /* Shadow effect on image. */
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 5, 5);
-
-    /* Change size of image. */
-    -fx-scale-x: 1;
-    -fx-scale-y: 1;
-
-    /* Rotate image clockwise by degrees. */
-    -fx-rotate: 0;
+    /* Circular profile picture */
+    -fx-background-radius: 25px;
+    -fx-border-radius: 25px;
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1px;
+    
+    /* Shadow effect on image */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0.3, 2, 2);
 }
 

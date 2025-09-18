@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.shape.Circle;
 
 /**
  * Represents a dialog box consisting of an ImageView to represent the speaker's face
@@ -36,6 +37,10 @@ public class DialogBox extends HBox {
 
         dialog.setText(text);
         displayPicture.setImage(img);
+
+        // Make profile picture circular
+        Circle clip = new Circle(25, 25, 25);
+        displayPicture.setClip(clip);
     }
 
     /**
@@ -60,19 +65,44 @@ public class DialogBox extends HBox {
         return db;
     }
 
+    public static DialogBox getErrorDialog(String text, Image img) {
+        var db = new DialogBox(text, img);
+        db.flip();
+        db.dialog.getStyleClass().add("error-label");
+        return db;
+    }
+
     private void changeDialogStyle(String commandType) {
         switch(commandType) {
         case "AddCommand":
-            boolean add = dialog.getStyleClass().add("add-label");
+            dialog.getStyleClass().add("add-label");
             break;
         case "MarkCommand":
             dialog.getStyleClass().add("marked-label");
             break;
+        case "UnmarkCommand":
+            dialog.getStyleClass().add("unmark-label");
+            break;
         case "DeleteCommand":
             dialog.getStyleClass().add("delete-label");
             break;
+        case "ListCommand":
+            dialog.getStyleClass().add("list-label");
+            break;
+        case "FindCommand":
+            dialog.getStyleClass().add("find-label");
+            break;
+        case "FindByDateCommand":
+            dialog.getStyleClass().add("findbydate-label");
+            break;
+        case "PlacesCommand":
+            dialog.getStyleClass().add("places-label");
+            break;
+        case "ByeCommand":
+            dialog.getStyleClass().add("bye-label");
+            break;
         default:
-        // Do nothing
+            // No special styling for unknown commands
         }
     }
 
