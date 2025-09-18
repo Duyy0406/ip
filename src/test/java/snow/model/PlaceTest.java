@@ -1,10 +1,6 @@
-package snow;
+package snow.model;
 
 import snow.io.Storage;
-import snow.model.Place;
-import snow.model.PlaceRegistry;
-import snow.model.TaskList;
-import snow.model.Todo;
 
 /**
  * Simple test to verify place persistence.

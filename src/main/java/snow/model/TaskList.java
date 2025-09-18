@@ -37,7 +37,10 @@ public class TaskList {
      * @param index zero-based index of the task
      */
     public void mark(int index) {
-        items.get(index).mark();
+        if (index >= 0 && index < items.size()) {
+            items.get(index).mark();
+        }
+        // Silently ignore invalid indices for graceful handling
     }
 
     /**
@@ -46,7 +49,10 @@ public class TaskList {
      * @param index zero-based index of the task
      */
     public void unmark(int index) {
-        items.get(index).unmark();
+        if (index >= 0 && index < items.size()) {
+            items.get(index).unmark();
+        }
+        // Silently ignore invalid indices for graceful handling
     }
 
     /**
@@ -80,7 +86,9 @@ public class TaskList {
         if (i >= items.size() || i < 0) {
             throw SnowTaskException.invalidIndex(i + 1, items.size());
         }
-        return items.remove(i);
+        Task removed = items.remove(i);
+        size--; // Fix: Decrement size when removing items
+        return removed;
     }
 
     /**

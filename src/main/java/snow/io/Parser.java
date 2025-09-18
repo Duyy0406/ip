@@ -210,7 +210,14 @@ public class Parser {
             String[] parts = line.split(" \\| ");
 
             String type = parts[0];
-            boolean isDone = "1".equals(parts[1]);
+            String statusStr = parts[1];
+
+            // Strict validation: only accept "0" or "1"
+            if (!"0".equals(statusStr) && !"1".equals(statusStr)) {
+                return null; // Invalid status value
+            }
+
+            boolean isDone = "1".equals(statusStr);
             String name = parts[2];
 
             Task t = null;
