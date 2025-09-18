@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+import snow.exception.SnowFileException;
 import snow.model.Place;
 import snow.model.PlaceRegistry;
 import snow.model.Task;
@@ -28,16 +29,26 @@ public class Storage {
     }
 
     /** Saves all tasks from {@code taskList} into the file. */
-    public void save(TaskList taskList) {
+    public void save(TaskList taskList) throws SnowFileException {
         try {
             File f = new File(filePath);
+
+            // Validate file path
+            if (filePath == null || filePath.trim().isEmpty()) {
+                throw SnowFileException.accessDenied("null or empty path");
+            }
 
             // ensure folder exists
             File parent = f.getParentFile();
             if (parent != null && !parent.exists()) {
                 if (!parent.mkdirs()) {
-                    System.out.println("Warning: failed to create directory " + parent);
+                    throw SnowFileException.directoryCreationFailed(parent.getAbsolutePath());
                 }
+            }
+
+            // Check if parent directory is writable
+            if (parent != null && !parent.canWrite()) {
+                throw SnowFileException.accessDenied(parent.getAbsolutePath());
             }
 
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
@@ -54,37 +65,54 @@ public class Storage {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Unable to save tasks: " + e.getMessage());
+            throw SnowFileException.accessDenied(filePath + " - " + e.getMessage());
         }
     }
 
     /** Loads tasks from the file into the given {@code taskList}. */
-    public void load(TaskList taskList) {
+    public void load(TaskList taskList) throws SnowFileException {
         try {
             File f = new File(filePath);
+
+            // Validate file path
+            if (filePath == null || filePath.trim().isEmpty()) {
+                throw SnowFileException.accessDenied("null or empty path");
+            }
 
             // ensure folder exists
             File parent = f.getParentFile();
             if (parent != null && !parent.exists()) {
                 if (!parent.mkdirs()) {
-                    System.out.println("Warning: failed to create directory " + parent);
+                    throw SnowFileException.directoryCreationFailed(parent.getAbsolutePath());
                 }
             }
 
             if (!f.exists()) {
                 // create empty file so future saves don't fail
                 if (!f.createNewFile()) {
-                    System.out.println("Warning: failed to create file " + f);
+                    throw SnowFileException.accessDenied(f.getAbsolutePath());
                 }
                 return; // nothing to load yet
+            }
+
+            // Check if file is readable
+            if (!f.canRead()) {
+                throw SnowFileException.accessDenied(f.getAbsolutePath());
             }
 
             // Clear existing places before loading
             PlaceRegistry.clearPlaces();
 
             try (Scanner sc = new Scanner(f)) {
+                int lineNumber = 0;
                 while (sc.hasNextLine()) {
-                    String line = sc.nextLine();
+                    lineNumber++;
+                    String line = sc.nextLine().trim();
+
+                    // Skip empty lines
+                    if (line.isEmpty()) {
+                        continue;
+                    }
 
                     // Try to parse as place first
                     Place place = Parser.parsePlaceFromStorage(line);
@@ -97,11 +125,13 @@ public class Storage {
                     Task task = Parser.parseLine(line);
                     if (task != null) {
                         taskList.add(task);
+                    } else {
+                        System.out.println("Warning: Failed to parse line " + lineNumber + ": " + line);
                     }
                 }
             }
         } catch (IOException e) {
-            System.out.println("Unable to load tasks: " + e.getMessage());
+            throw SnowFileException.accessDenied(filePath + " - " + e.getMessage());
         }
     }
 }

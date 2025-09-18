@@ -25,13 +25,21 @@ public class PlaceTest {
 
         // Save to file
         Storage storage = new Storage("data/test-snow.txt");
-        storage.save(tasks);
-        System.out.println("Saved tasks and places to file");
+        try {
+            storage.save(tasks);
+            System.out.println("Saved tasks and places to file");
+        } catch (Exception e) {
+            System.out.println("Error saving: " + e.getMessage());
+        }
 
         // Clear and reload
         PlaceRegistry.clearPlaces();
         TaskList newTasks = new TaskList();
-        storage.load(newTasks);
+        try {
+            storage.load(newTasks);
+        } catch (Exception e) {
+            System.out.println("Error loading: " + e.getMessage());
+        }
 
         System.out.println("Loaded " + PlaceRegistry.getPlaces().size() + " places:");
         for (Place p : PlaceRegistry.getPlaces()) {

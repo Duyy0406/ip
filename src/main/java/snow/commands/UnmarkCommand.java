@@ -1,8 +1,7 @@
 package snow.commands;
 
 import snow.exception.SnowException;
-import snow.exception.SnowInvalidDescriptionException;
-import snow.exception.SnowInvalidIndexException;
+import snow.exception.SnowTaskException;
 import snow.io.Storage;
 import snow.io.Ui;
 import snow.model.TaskList;
@@ -24,7 +23,7 @@ public class UnmarkCommand extends Command {
         try {
             index = Integer.parseInt(description) - 1;
         } catch (NumberFormatException e) {
-            throw new SnowInvalidDescriptionException();
+            throw SnowTaskException.invalidIndex(Integer.parseInt(description.trim().isEmpty() ? "0" : description), 0);
         }
     }
 
@@ -33,7 +32,7 @@ public class UnmarkCommand extends Command {
     public void execute(TaskList tasks, Ui ui, Storage storage) throws SnowException {
         resetString();
         if (index >= tasks.size() || index < 0) {
-            throw new SnowInvalidIndexException();
+            throw SnowTaskException.invalidIndex(index + 1, tasks.size());
         }
         tasks.unmark(index);
         storage.save(tasks);

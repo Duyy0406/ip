@@ -14,10 +14,10 @@ import snow.commands.MarkCommand;
 import snow.commands.PlacesCommand;
 import snow.commands.UnmarkCommand;
 import snow.datetime.DateTime;
-import snow.exception.SnowEmptyDateException;
-import snow.exception.SnowEmptyTaskException;
 import snow.exception.SnowException;
 import snow.exception.SnowInvalidCommandException;
+import snow.exception.SnowInvalidDateException;
+import snow.exception.SnowTaskException;
 import snow.model.Deadline;
 import snow.model.Event;
 import snow.model.Place;
@@ -46,12 +46,27 @@ public class Parser {
      * @throws SnowInvalidCommandException If the input does not start with a valid command.
      */
     public static Command getCmd(String cmd) throws SnowException {
+        // Sanitize input: trim and handle multiple spaces
+        if (cmd == null) {
+            throw new SnowInvalidCommandException("Command cannot be null");
+        }
+
+        cmd = cmd.trim();
+        if (cmd.isEmpty()) {
+            throw new SnowInvalidCommandException("Command cannot be empty");
+        }
+
+        // Replace multiple spaces with single space
+        cmd = cmd.replaceAll("\\s+", " ");
+
         String[] parts = cmd.split(" ", 2);
         if (parts.length == 0) {
-            throw new SnowInvalidCommandException();
+            throw new SnowInvalidCommandException("Command cannot be empty");
         }
-        String firstWord = parts[0];
+
+        String firstWord = parts[0].toLowerCase(); // Case insensitive commands
         String description = (parts.length == 1) ? "" : parts[1];
+
         return switch (firstWord) {
         case "todo" -> AddCommand.todo(description);
         case "deadline" -> splitDeadline(description);
@@ -64,7 +79,7 @@ public class Parser {
         case "findbydate" -> createFindByDateCommand(description);
         case "places" -> new PlacesCommand();
         case "bye" -> new ByeCommand();
-        default -> throw new SnowInvalidCommandException();
+        default -> throw new SnowInvalidCommandException(firstWord);
         };
     }
 
@@ -94,7 +109,7 @@ public class Parser {
      */
     private static FindByDateCommand createFindByDateCommand(String description) throws SnowException {
         if (description == null || description.isBlank()) {
-            throw new SnowEmptyDateException("findbydate");
+            throw SnowTaskException.missingDate("findbydate");
         }
 
         try {
@@ -103,7 +118,7 @@ public class Parser {
             LocalDate date = dateTime.toLocalDate();
             return new FindByDateCommand(date);
         } catch (Exception e) {
-            throw new SnowEmptyDateException("findbydate - use YYYY-MM-DD or D/M/YYYY format");
+            throw new SnowInvalidDateException(description);
         }
     }
 
@@ -120,10 +135,10 @@ public class Parser {
     public static Command splitDeadline(String description) throws SnowException {
         String[] parts = description.split("\\s*/by\\s*", 2);
         if (parts.length == 0 || isInvalid(parts[0])) {
-            throw new SnowEmptyTaskException("deadline");
+            throw SnowTaskException.emptyDescription("deadline");
         }
         if (parts.length == 1 || isInvalid(parts[1])) {
-            throw new SnowEmptyDateException("deadline");
+            throw SnowTaskException.missingDate("deadline");
         }
         return AddCommand.deadline(parts[0], DateTime.parse(parts[1].trim()));
     }
@@ -137,24 +152,44 @@ public class Parser {
      * @return an {@link Command} that adds an event
      * @throws SnowEmptyDateException if start or end times are missing
      * @throws SnowEmptyTaskException if the description is missing
+     * @throws SnowDataValidationException if start date is after end date
      */
     public static Command splitEvent(String description) throws SnowException {
+        if (description == null || description.trim().isEmpty()) {
+            throw SnowTaskException.emptyDescription("event");
+        }
+
+        // Check for missing /to keyword
+        if (!description.contains("/to")) {
+            throw SnowTaskException.missingEndTime();
+        }
+
         String[] parts = description.split("\\s*/from\\s*", 2);
         if (parts.length == 0 || isInvalid(parts[0])) {
-            throw new SnowEmptyTaskException("event");
+            throw SnowTaskException.emptyDescription("event");
         }
         if (parts.length == 1 || isInvalid(parts[1])) {
-            throw new SnowEmptyDateException("event");
+            throw SnowTaskException.missingDate("event");
         }
+
         String[] dates = parts[1].split("\\s*/to\\s*", 2);
-        if (dates.length < 2 || isInvalid(parts[0], parts[1])) {
-            throw new SnowEmptyDateException("event");
+        if (dates.length < 2 || isInvalid(dates[0], dates[1])) {
+            throw SnowTaskException.missingEndTime();
         }
+
         String fromDate = dates[0].trim();
         String toDate = dates[1].trim();
 
+        // Validate that both dates can be parsed
+        LocalDateTime startTime = DateTime.parse(fromDate);
+        LocalDateTime endTime = DateTime.parse(toDate);
 
-        return AddCommand.event(parts[0], DateTime.parse(fromDate), DateTime.parse(toDate));
+        // Validate that start is before end
+        if (!startTime.isBefore(endTime)) {
+            throw SnowTaskException.invalidTimeOrder();
+        }
+
+        return AddCommand.event(parts[0], startTime, endTime);
     }
 
     /**

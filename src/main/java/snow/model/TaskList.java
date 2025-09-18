@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import snow.exception.SnowInvalidIndexException;
+import snow.exception.SnowTaskException;
 
 /**
  * A mutable list of {@link Task} objects with simple query helpers.
@@ -76,11 +76,10 @@ public class TaskList {
      * @return the removed task
      * @throws SnowInvalidIndexException if the index is out of range
      */
-    public Task remove(int i) throws SnowInvalidIndexException {
-        if (i < 0 || i >= size) {
-            throw new SnowInvalidIndexException();
+    public Task remove(int i) throws SnowTaskException {
+        if (i >= items.size() || i < 0) {
+            throw SnowTaskException.invalidIndex(i + 1, items.size());
         }
-        size--;
         return items.remove(i);
     }
 

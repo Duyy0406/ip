@@ -2,8 +2,8 @@ package snow.commands;
 
 import java.time.LocalDateTime;
 
-import snow.exception.SnowEmptyTaskException;
 import snow.exception.SnowException;
+import snow.exception.SnowTaskException;
 import snow.io.Parser;
 import snow.io.Storage;
 import snow.io.Ui;
@@ -80,7 +80,7 @@ public class AddCommand extends Command {
     public void execute(TaskList tasks, Ui ui, Storage storage) throws SnowException {
         resetString();
         if (description == null || description.isBlank()) {
-            throw new SnowEmptyTaskException(this.type.toString());
+            throw SnowTaskException.emptyDescription(this.type.toString());
         }
         String[] parts = Parser.parsePlace(description);
         String taskName = parts[0];

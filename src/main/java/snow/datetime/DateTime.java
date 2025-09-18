@@ -38,17 +38,50 @@ public final class DateTime {
      * If only a date is given, default to 23:59 (end of day).
      */
     public static LocalDateTime parse(String input) throws SnowException {
-        assert input != null : "Date cannot be empty";
+        if (input == null) {
+            throw new SnowInvalidDateException("null");
+        }
+
         input = input.trim();
+        if (input.isEmpty()) {
+            throw new SnowInvalidDateException("empty string");
+        }
+
+        // Check for obviously invalid patterns
+        if (input.contains("//") || input.startsWith("/") || input.endsWith("/")) {
+            throw new SnowInvalidDateException(input);
+        }
+
+        // Remove any extra whitespace around separators
+        input = input.replaceAll("\\s+", " ");
+
         LocalDateTime dt = tryFormats(input, DATETIME_FORMATS, true);
         if (dt != null) {
+            validateDateTime(dt);
             return dt;
         }
         LocalDateTime d = tryFormats(input, DATE_FORMATS, false);
         if (d != null) {
+            validateDateTime(d);
             return d;
         }
-        throw new SnowInvalidDateException();
+        throw new SnowInvalidDateException(input);
+    }
+
+    /**
+     * Validates that a datetime is reasonable (not too far in past/future, valid date).
+     */
+    private static void validateDateTime(LocalDateTime dateTime) throws SnowInvalidDateException {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime minDate = now.minusYears(100);
+        LocalDateTime maxDate = now.plusYears(100);
+
+        if (dateTime.isBefore(minDate)) {
+            throw new SnowInvalidDateException("date too far in past");
+        }
+        if (dateTime.isAfter(maxDate)) {
+            throw new SnowInvalidDateException("date too far in future");
+        }
     }
     /**
      * Attempts to parse input as LocalDateTime using available formats.
@@ -87,6 +120,14 @@ public final class DateTime {
             }
         }
         return null;
+    }
+
+    /**
+     * Parse a date string and return LocalDate (for findbydate command).
+     */
+    public static LocalDate parseDate(String input) throws SnowException {
+        LocalDateTime dateTime = parse(input);
+        return dateTime.toLocalDate();
     }
 
 }

@@ -2,6 +2,7 @@ package snow.model;
 
 import snow.commands.Command;
 import snow.exception.SnowException;
+import snow.exception.SnowFileException;
 import snow.io.Parser;
 import snow.io.Storage;
 import snow.io.Ui;
@@ -27,8 +28,16 @@ public class Snow {
     private String commandType;
     private boolean shouldExit = false;
 
+    /**
+     * Constructs a new Snow instance and loads existing tasks from storage.
+     */
     public Snow() {
-        STORAGE.load(TASKS);
+        try {
+            STORAGE.load(TASKS);
+        } catch (SnowFileException e) {
+            System.out.println("Warning: " + e.getMessage());
+            // Continue with empty task list
+        }
     }
 
     /**
