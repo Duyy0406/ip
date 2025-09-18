@@ -1,7 +1,7 @@
 .label {
-    background: white;
+    background: #ffffff;  /* Snow white */
     -fx-background-color: background;
-    -fx-border-color: #d55e00 #009e73 #cc79a7 #0072b2;
+    -fx-border-color: #4682b4;  /* Steel blue border */
     -fx-border-width: 1px;
     -fx-background-radius: 15px 15px 5px 15px;
     -fx-border-radius: 15px 15px 5px 15px;
@@ -17,13 +17,13 @@
 }
 
 .add-label {
-    -fx-background-color: #e8f5e8;
-    -fx-border-color: #4caf50;
+    -fx-background-color: #e6f3ff;  /* Light winter blue */
+    -fx-border-color: #4682b4;     /* Steel blue */
 }
 
 .marked-label {
-    -fx-background-color: #e8f4fd;
-    -fx-border-color: #2196f3;
+    -fx-background-color: #f0f8ff;  /* Alice blue */
+    -fx-border-color: #5f9ea0;     /* Cadet blue */
 }
 
 .delete-label {

@@ -182,9 +182,14 @@ public class Parser {
             if ("T".equals(type)) {
                 t = new Todo(name);
             } else if ("D".equals(type)) {
-                t = new Deadline(name, LocalDateTime.parse(parts[3]));
+                // For deadline, find the date (it should be the last part)
+                String dateStr = parts[parts.length - 1];
+                t = new Deadline(name, LocalDateTime.parse(dateStr));
             } else if ("E".equals(type)) {
-                t = new Event(name, LocalDateTime.parse(parts[3]), LocalDateTime.parse(parts[4]));
+                // For event, find the start and end dates (last two parts)
+                String startStr = parts[parts.length - 2];
+                String endStr = parts[parts.length - 1];
+                t = new Event(name, LocalDateTime.parse(startStr), LocalDateTime.parse(endStr));
             }
 
             if (t != null) {

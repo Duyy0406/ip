@@ -23,7 +23,7 @@ public class Ui {
     private static final String ADD = "Got it. I've added this task:";
     private static final String DELETE = "Noted. I've removed this task:";
     private static final String FIND = "Here are the matching tasks in your list:";
-    private static final String BYE = "Bye! Stay cool and see u again soon!";
+    private static final String BYE = "Bye! Hope to see you again soon!";
     private static final String GREETING = "Hello! I'm " + NAME;
     private static final String ASK = "What can I do for you?";
 
