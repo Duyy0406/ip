@@ -7,8 +7,9 @@ Snow is a friendly task management chatbot that helps you organize your daily ac
 ## Quick Start
 
 1. Download the latest `snow.jar` from the [releases page](https://github.com/Duyy0406/ip/releases)
-2. Double-click the file to launch Snow
-3. Start chatting with Snow to manage your tasks!
+2. Open a terminal/command prompt and navigate to the folder containing `snow.jar`
+3. Run the command: `java -jar snow.jar`
+4. Start chatting with Snow to manage your tasks!
 
 ## Features
 
@@ -233,8 +234,11 @@ Snow automatically saves your tasks to a file called `data/snow.txt`. Your tasks
 
 ## Troubleshooting
 
-**Q: Snow won't start**  
-A: Make sure you have Java 11 or later installed on your system.
+**Q: Snow won't start when I double-click the JAR file**  
+A: Use the command line instead: `java -jar snow.jar`. JavaFX applications require specific launch parameters that aren't available when double-clicking.
+
+**Q: Snow won't start from command line**  
+A: Make sure you have Java 11 or later installed on your system. You can check with `java -version`.
 
 **Q: My tasks disappeared**  
 A: Check if the `data/snow.txt` file exists in the same folder as the Snow application.
