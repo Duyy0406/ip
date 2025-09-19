@@ -74,8 +74,12 @@ public class Ui {
      */
     public void printList(TaskList tasks) {
         print(LIST);
-        for (int i = 0; i < tasks.size(); ++i) {
-            print("  " + (i + 1) + "." + tasks.get(i));
+        if (tasks.size() == 0) {
+            print("No tasks in your list yet.");
+        } else {
+            for (int i = 0; i < tasks.size(); ++i) {
+                print("  " + (i + 1) + "." + tasks.get(i));
+            }
         }
     }
 
@@ -130,8 +134,12 @@ public class Ui {
      */
     public void printFind(List<Task> tasksFound) {
         print(FIND);
-        for (int i = 0; i < tasksFound.size(); ++i) {
-            print((i + 1) + "." + tasksFound.get(i));
+        if (tasksFound.size() == 0) {
+            print("No matching tasks found.");
+        } else {
+            for (int i = 0; i < tasksFound.size(); ++i) {
+                print((i + 1) + "." + tasksFound.get(i));
+            }
         }
     }
 

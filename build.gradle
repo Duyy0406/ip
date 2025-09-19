@@ -57,5 +57,11 @@ application {
 }
 
 shadowJar {
-    archiveBaseName = "snow.jar"
+    archiveBaseName = "snow"
+    archiveClassifier.set("")
+    archiveVersion.set("")
+}
+
+jar {
+    enabled = false
 }

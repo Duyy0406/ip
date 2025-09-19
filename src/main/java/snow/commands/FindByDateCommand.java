@@ -32,8 +32,12 @@ public class FindByDateCommand extends Command {
         resetString();
         List<Task> tasksFound = tasks.findTaskWithDate(date);
         command.append(FIND_DATE);
-        for (int i = 0; i < tasksFound.size(); ++i) {
-            command.append("\n").append("  ").append(i + 1).append(".").append(tasksFound.get(i));
+        if (tasksFound.size() == 0) {
+            command.append("\n").append("No tasks found on " + date + ".");
+        } else {
+            for (int i = 0; i < tasksFound.size(); ++i) {
+                command.append("\n").append("  ").append(i + 1).append(".").append(tasksFound.get(i));
+            }
         }
         ui.printFind(tasksFound);
     }

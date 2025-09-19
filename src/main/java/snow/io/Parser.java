@@ -292,7 +292,7 @@ public class Parser {
             String part = parts[i];
             if (part.startsWith("pid=")) {
                 int placeId = Integer.parseInt(part.substring(4));
-                if (placeId != -1) { 
+                if (placeId != -1) {
                     Place place = PlaceRegistry.findById(placeId);
                     if (place != null) {
                         task.setPlace(place);

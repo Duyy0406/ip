@@ -31,8 +31,12 @@ public class FindCommand extends Command {
         resetString();
         List<Task> tasksFound = tasks.find(pattern);
         command.append(FIND);
-        for (int i = 0; i < tasksFound.size(); ++i) {
-            command.append("\n").append("  ").append(i + 1).append(".").append(tasksFound.get(i));
+        if (tasksFound.size() == 0) {
+            command.append("\n").append("No matching tasks found.");
+        } else {
+            for (int i = 0; i < tasksFound.size(); ++i) {
+                command.append("\n").append("  ").append(i + 1).append(".").append(tasksFound.get(i));
+            }
         }
         ui.printFind(tasksFound);
     }
