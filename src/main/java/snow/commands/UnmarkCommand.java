@@ -20,10 +20,14 @@ public class UnmarkCommand extends Command {
      * @throws SnowException if the description is invalid
      */
     public UnmarkCommand(String description) throws SnowException {
+        if (description == null || description.trim().isEmpty()) {
+            throw SnowTaskException.missingTaskNumber("unmark");
+        }
+
         try {
-            index = Integer.parseInt(description) - 1;
+            index = Integer.parseInt(description.trim()) - 1;
         } catch (NumberFormatException e) {
-            throw SnowTaskException.invalidIndex(Integer.parseInt(description.trim().isEmpty() ? "0" : description), 0);
+            throw SnowTaskException.missingTaskNumber("unmark");
         }
     }
 

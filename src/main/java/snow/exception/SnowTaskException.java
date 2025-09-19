@@ -46,4 +46,12 @@ public class SnowTaskException extends SnowException {
     public static SnowTaskException invalidIndex(int index, int maxSize) {
         return new SnowTaskException("Task number " + index + " does not exist. You have " + maxSize + " tasks.");
     }
+
+    /**
+     * Creates exception for missing task number in commands like mark, unmark, delete.
+     */
+    public static SnowTaskException missingTaskNumber(String commandName) {
+        return new SnowTaskException("Please specify which task to " + commandName
+                + ". Usage: " + commandName + " <task number>");
+    }
 }

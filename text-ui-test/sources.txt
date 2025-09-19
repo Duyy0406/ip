@@ -4,6 +4,7 @@
 ../src/main/java/snow/io/Ui.java
 ../src/main/java/snow/gui/DialogBox.java
 ../src/main/java/snow/gui/Main.java
+../src/main/java/snow/gui/CommandType.java
 ../src/main/java/snow/gui/MainWindow.java
 ../src/main/java/snow/gui/Launcher.java
 ../src/main/java/snow/model/TaskList.java

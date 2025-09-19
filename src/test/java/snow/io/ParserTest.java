@@ -264,4 +264,25 @@ public class ParserTest {
         assertNotNull(task);
         assertEquals("submit CS2103T assignment", task.getDescription());
     }
+
+    @Test
+    void getCmd_markWithoutNumber_throwsException() {
+        assertThrows(SnowTaskException.class, () -> Parser.getCmd("mark"));
+        assertThrows(SnowTaskException.class, () -> Parser.getCmd("mark "));
+        assertThrows(SnowTaskException.class, () -> Parser.getCmd("mark abc"));
+    }
+
+    @Test
+    void getCmd_unmarkWithoutNumber_throwsException() {
+        assertThrows(SnowTaskException.class, () -> Parser.getCmd("unmark"));
+        assertThrows(SnowTaskException.class, () -> Parser.getCmd("unmark "));
+        assertThrows(SnowTaskException.class, () -> Parser.getCmd("unmark xyz"));
+    }
+
+    @Test
+    void getCmd_deleteWithoutNumber_throwsException() {
+        assertThrows(SnowTaskException.class, () -> Parser.getCmd("delete"));
+        assertThrows(SnowTaskException.class, () -> Parser.getCmd("delete "));
+        assertThrows(SnowTaskException.class, () -> Parser.getCmd("delete invalid"));
+    }
 }
