@@ -1,13 +1,28 @@
+list
 todo read book
 deadline return book /by 2025-06-06 00:00
 event project meeting /from 2025-08-06 14:00 /to 2025-08-06 16:00
-todo join sports club
-todo borrow book
+todo join sports club /at gym
+deadline submit assignment /by 2025-12-01 23:59 /at school
 list
 mark 1
 mark 4
+unmark 1
 list
-deadline return book /by 2025-09-07 00:00
-event project meeting /from 2025-10-07 14:00 /to 2025-10-07 16:00
+find book
+find meeting
+find xyz
+findbydate 2025-06-06
+findbydate 2025-08-06
+findbydate 2025-01-01
+delete 5
+list
+places
+todo buy groceries /at supermarket
+places
+delete 2
+list
+unmark 4
+mark 2
 list
 bye

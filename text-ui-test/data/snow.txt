@@ -1,0 +1,6 @@
+P | 1 | gym
+P | 2 | supermarket
+T | 0 | read book | at= | pid=-1
+E | 1 | project meeting | at= | pid=-1 | 2025-08-06T14:00 | 2025-08-06T16:00
+T | 1 | join sports club | at=gym | pid=1
+T | 0 | buy groceries | at=supermarket | pid=2
