@@ -207,11 +207,6 @@ Close Snow and save your tasks.
 
 **Format:** `bye`
 
-**Expected output:**
-```
-Bye. Hope to see you again soon!
-```
-
 ## Task Status Symbols
 
 - `[T]` - Todo task

@@ -61,7 +61,7 @@ public class DialogBox extends HBox {
     public static DialogBox getSnowDialog(String text, Image img, String commandType) {
         var db = new DialogBox(text, img);
         db.flip();
-        db.changeDialogStyle(commandType);
+        db.changeDialogStyle(CommandType.fromClassName(commandType));
         return db;
     }
 
@@ -72,37 +72,10 @@ public class DialogBox extends HBox {
         return db;
     }
 
-    private void changeDialogStyle(String commandType) {
-        switch(commandType) {
-        case "AddCommand":
-            dialog.getStyleClass().add("add-label");
-            break;
-        case "MarkCommand":
-            dialog.getStyleClass().add("marked-label");
-            break;
-        case "UnmarkCommand":
-            dialog.getStyleClass().add("unmark-label");
-            break;
-        case "DeleteCommand":
-            dialog.getStyleClass().add("delete-label");
-            break;
-        case "ListCommand":
-            dialog.getStyleClass().add("list-label");
-            break;
-        case "FindCommand":
-            dialog.getStyleClass().add("find-label");
-            break;
-        case "FindByDateCommand":
-            dialog.getStyleClass().add("findbydate-label");
-            break;
-        case "PlacesCommand":
-            dialog.getStyleClass().add("places-label");
-            break;
-        case "ByeCommand":
-            dialog.getStyleClass().add("bye-label");
-            break;
-        default:
-            // No special styling for unknown commands
+    private void changeDialogStyle(CommandType commandType) {
+        String styleClass = commandType.getStyleClass();
+        if (!styleClass.isEmpty()) {
+            dialog.getStyleClass().add(styleClass);
         }
     }
 
