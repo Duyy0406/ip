@@ -13,6 +13,7 @@ public enum CommandType {
     FIND_BY_DATE_COMMAND("findbydate-label"),
     PLACES_COMMAND("places-label"),
     BYE_COMMAND("bye-label"),
+    GREETING_COMMAND("greeting-label"),
     UNKNOWN_COMMAND(""); // No styling for unknown commands
 
     private final String styleClass;
@@ -50,6 +51,8 @@ public enum CommandType {
             return PLACES_COMMAND;
         case "ByeCommand":
             return BYE_COMMAND;
+        case "GreetingCommand":
+            return GREETING_COMMAND;
         default:
             return UNKNOWN_COMMAND;
         }

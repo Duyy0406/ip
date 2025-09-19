@@ -9,7 +9,8 @@ Snow is a friendly task management chatbot that helps you organize your daily ac
 1. Download the latest `snow.jar` from the [releases page](https://github.com/Duyy0406/ip/releases)
 2. Open a terminal/command prompt and navigate to the folder containing `snow.jar`
 3. Run the command: `java -jar snow.jar`
-4. Start chatting with Snow to manage your tasks!
+4. Snow will greet you with a friendly welcome message
+5. Start chatting with Snow to manage your tasks!
 
 ## Features
 
@@ -161,7 +162,7 @@ Here are the matching tasks in your list:
 
 ### Finding Tasks by Date: `findbydate`
 
-Find all tasks scheduled for a specific date.
+Find all undone tasks scheduled for a specific date.
 
 **Format:** `findbydate DATE`
 
@@ -172,7 +173,7 @@ findbydate 2024-11-25
 
 **Expected output:**
 ```
-Here are the tasks on 2024-11-25:
+Here are the undone tasks on the specified date:
 1. [E][ ] Team meeting (from: Nov 25 2024 2:00 PM to: Nov 25 2024 4:00 PM)
 ```
 

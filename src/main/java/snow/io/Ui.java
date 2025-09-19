@@ -68,6 +68,14 @@ public class Ui {
     }
 
     /**
+     * Gets the greeting message for GUI display.
+     * @return the formatted greeting message
+     */
+    public String getGreeting() {
+        return GREETING + "\n" + ASK;
+    }
+
+    /**
      * Prints the tasks in the provided list with indices.
      *
      * @param tasks the task list to display

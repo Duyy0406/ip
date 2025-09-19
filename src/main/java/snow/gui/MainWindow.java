@@ -35,6 +35,16 @@ public class MainWindow extends AnchorPane {
     /** Injects the Snow instance */
     public void setSnow(Snow d) {
         snow = d;
+        // Show greeting when Snow is set
+        showGreeting();
+    }
+
+    /**
+     * Shows the initial greeting from Snow.
+     */
+    private void showGreeting() {
+        String greeting = snow.getGreeting();
+        dialogContainer.getChildren().add(DialogBox.getSnowDialog(greeting, snowImage, "GreetingCommand"));
     }
 
     /**

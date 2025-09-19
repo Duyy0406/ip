@@ -65,6 +65,14 @@ public class Snow {
     }
 
     /**
+     * Gets the greeting message for GUI display.
+     * @return the greeting message
+     */
+    public String getGreeting() {
+        return UI.getGreeting();
+    }
+
+    /**
      * Runs the Snow application.
      * Initializes the user interface, greets the user, and processes commands
      * until the user exits.

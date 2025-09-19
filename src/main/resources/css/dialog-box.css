@@ -61,6 +61,11 @@
     -fx-border-color: #8bc34a;
 }
 
+.greeting-label {
+    -fx-background-color: #f0f8ff;  /* Alice blue - welcoming tone */
+    -fx-border-color: #4169e1;     /* Royal blue */
+}
+
 .error-label {
     -fx-background-color: #ffebee;
     -fx-border-color: #e91e63;
