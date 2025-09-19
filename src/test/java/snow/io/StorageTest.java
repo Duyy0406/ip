@@ -74,7 +74,7 @@ public class StorageTest {
         storage.save(taskList);
 
         String content = Files.readString(Paths.get(testFilePath));
-        String[] lines = content.trim().split("\n");
+        String[] lines = content.trim().split("\\r?\\n");
         assertEquals(2, lines.length);
         assertEquals("T | 0 | read book | at= | pid=-1", lines[0]);
         assertEquals("T | 1 | complete assignment | at= | pid=-1", lines[1]);
@@ -88,7 +88,7 @@ public class StorageTest {
         storage.save(taskList);
 
         String content = Files.readString(Paths.get(testFilePath));
-        String[] lines = content.trim().split("\n");
+        String[] lines = content.trim().split("\\r?\\n");
         assertEquals(1, lines.length);
         assertEquals("D | 0 | submit project | at= | pid=-1 | 2023-12-31T23:59", lines[0]);
     }
@@ -103,7 +103,7 @@ public class StorageTest {
         storage.save(taskList);
 
         String content = Files.readString(Paths.get(testFilePath));
-        String[] lines = content.trim().split("\n");
+        String[] lines = content.trim().split("\\r?\\n");
         assertEquals(1, lines.length);
         assertEquals("E | 0 | team meeting | at= | pid=-1 | 2023-12-25T14:00 | 2023-12-25T16:00", lines[0]);
     }
@@ -120,7 +120,7 @@ public class StorageTest {
         storage.save(taskList);
 
         String content = Files.readString(Paths.get(testFilePath));
-        String[] lines = content.trim().split("\n");
+        String[] lines = content.trim().split("\\r?\\n");
         assertEquals(3, lines.length);
         assertTrue(lines[0].startsWith("T |"));
         assertTrue(lines[1].startsWith("D |"));
